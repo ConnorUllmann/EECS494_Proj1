@@ -70,10 +70,42 @@ public class Tile : MonoBehaviour {
                 bc.size = Vector3.one;
                 break;
             case 'D': //Door
+                tag = "Door";
+                bc.center = Vector3.zero;
+                bc.size = new Vector3(.5f, .5f, .5f);
+                bc.isTrigger = true;
                 break;
             default:
                 bc.enabled = false;
                 break;
         }
 	}	
+
+    void OnTriggerEnter(Collider coll) {
+        //Behavior for doors
+        if(tag == "Door" && coll.gameObject.tag == "Hero") {
+            GameObject otherSide = FindTileWithTag("Door", 4.0f);
+            if(otherSide == null) { //if there is no door found do nothing
+                return;
+            }
+
+            Vector3 directionOffset = otherSide.transform.position - transform.position;
+            coll.transform.position = otherSide.transform.position + (directionOffset / directionOffset.magnitude); //place the hero 1 tile past the door
+            
+        }
+    }
+
+
+    //Searches for a tile within distance units of this one with the given tag
+    //Returns null if no tile is found
+    public GameObject FindTileWithTag(string tag, float distance) {
+
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, distance);
+        foreach(Collider c in hitColliders) {
+            if (c.gameObject.tag == tag && c.gameObject != this.gameObject) return c.gameObject;
+        }
+
+        return null;
+    }
+
 }
