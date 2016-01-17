@@ -14,12 +14,25 @@ public class PlayerControl : MonoBehaviour {
     public bool bInvincible = false;
     public float invincibilityTimer = 3.0f;
 
+    private float distanceToNextDoor = 3.5f;
+    public float doorMoveOffset = 0.6f;
+
     public Sprite[] link_run_down;
 	public Sprite[] link_run_up;
 	public Sprite[] link_run_right;
 	public Sprite[] link_run_left;
 
-	StateMachine animation_state_machine;
+    public Sprite[] link_run_down_invincible;
+    public Sprite[] link_run_up_invincible;
+    public Sprite[] link_run_right_invincible;
+    public Sprite[] link_run_left_invincible;
+
+    public Sprite[] down_invincible;
+    public Sprite[] up_invincible;
+    public Sprite[] right_invincible;
+    public Sprite[] left_invincible;
+
+    StateMachine animation_state_machine;
 	StateMachine control_state_machine;
 	
 	public EntityState current_state = EntityState.NORMAL;
@@ -71,6 +84,22 @@ public class PlayerControl : MonoBehaviour {
                     bInvincible = true;
                 }
                 break;
+            case "Door":
+                MoveToNextRoom();
+                break;
         }
+    }
+
+    void MoveToNextRoom() {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, distanceToNextDoor);
+        GameObject nextDoor = new GameObject();
+        foreach (Collider c in hitColliders) {
+            if (c.gameObject.tag == "Door" && Vector3.Distance(transform.position, c.transform.position) > 1.0f) {
+                nextDoor = c.gameObject;
+            }
+        }
+
+        Vector3 directionOffset = nextDoor.transform.position - transform.position;
+        transform.position = nextDoor.transform.position + (directionOffset / directionOffset.magnitude) * doorMoveOffset;
     }
 }

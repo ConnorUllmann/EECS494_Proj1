@@ -72,7 +72,7 @@ public class Tile : MonoBehaviour {
             case 'D': //Door
                 tag = "Door";
                 bc.center = Vector3.zero;
-                bc.size = new Vector3(.5f, .5f, .5f);
+                bc.size = new Vector3(.25f, .25f, .25f);
                 bc.isTrigger = true;
                 break;
             default:
@@ -81,10 +81,10 @@ public class Tile : MonoBehaviour {
         }
 	}	
 
-    void OnTriggerEnter(Collider coll) {
+   /* void OnTriggerEnter(Collider coll) {
         //Behavior for doors
         if(tag == "Door" && coll.gameObject.tag == "Hero") {
-            GameObject otherSide = FindTileWithTag("Door", 4.0f);
+            GameObject otherSide = FindTileWithTag("Door", 3.0f);
             if(otherSide == null) { //if there is no door found do nothing
                 return;
             }
@@ -106,6 +106,6 @@ public class Tile : MonoBehaviour {
         }
 
         return null;
-    }
+    }*/
 
 }
