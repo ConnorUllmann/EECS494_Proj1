@@ -63,7 +63,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
+    <Compile Include="Assets\Scripts\CameraPoints.cs" />
+    <Compile Include="Assets\Scripts\CreateCameraPoints.cs" />
+    <Compile Include="Assets\Scripts\DisappearOnStart.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
+    <Compile Include="Assets\Scripts\FollowCameraPoints.cs" />
     <Compile Include="Assets\Scripts\HUD.cs" />
     <Compile Include="Assets\Scripts\Keese.cs" />
     <Compile Include="Assets\Scripts\ParseZeldaMap.cs" />

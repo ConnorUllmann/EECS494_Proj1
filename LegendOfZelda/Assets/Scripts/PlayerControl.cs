@@ -44,10 +44,9 @@ public class PlayerControl : MonoBehaviour {
         control_state_machine.Update();
         if (control_state_machine.IsFinished())
             control_state_machine.ChangeState(new StateLinkNormalMovement(this));
-        // CameraFollow.S.GetComponent<Camera>().ScreenToWorldPoint(
-        //Debug.DrawLine(new Vector3(0, 0, -5), );
+        
 
-        Vector3[] pt = 
+        /*Vector3[] pt = 
         {
             new Vector3(Utils.GetRoomX(transform.position.x), Utils.GetRoomY(transform.position.y), -5),
             new Vector3(Utils.GetRoomX(transform.position.x) + Utils.roomSize.x, Utils.GetRoomY(transform.position.y), -5),
@@ -59,20 +58,7 @@ public class PlayerControl : MonoBehaviour {
         {
             int o = (i + 1) % 4;
             Debug.DrawLine(pt[i], pt[o], i == 0 ? Color.blue : (i == 1 ? Color.green : Color.white));
-        }
-
-        if (Utils.CollidingWithTopEdge(transform.position) ||
-           Utils.CollidingWithBottomEdge(transform.position) ||
-           Utils.CollidingWithLeftEdge(transform.position) ||
-           Utils.CollidingWithRightEdge(transform.position))
-        {
-            GetComponent<SpriteRenderer>().color = Color.red;
-        }
-        else
-        {
-            GetComponent<SpriteRenderer>().color = Color.white;
-        }
-        //Debug.DrawLine(new Vector3(ShowMapOnCamera.S.screenSize.x, ShowMapOnCamera.S.screenSize.y, 5), new Vector3(0, 0, 5));
+        }*/
     }
 
     void OnTriggerEnter(Collider coll)

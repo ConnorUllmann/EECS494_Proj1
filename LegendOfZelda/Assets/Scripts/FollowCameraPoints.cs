@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class FollowCameraPoints : MonoBehaviour {
 
     public Transform cameraPoint;
-    public Vector3 offset = new Vector3(0, 1, -10);
+    public Vector3 offset = new Vector3(0, 0, -10);
     public float easing = 0.1f;
 
     private Camera cam;
