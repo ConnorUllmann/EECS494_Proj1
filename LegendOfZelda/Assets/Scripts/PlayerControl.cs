@@ -25,8 +25,8 @@ public class PlayerControl : MonoBehaviour {
 	public GameObject selected_weapon_prefab;
 
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         if (S != null)
             Debug.LogError("Multiple players!");
         S = this;
@@ -37,13 +37,42 @@ public class PlayerControl : MonoBehaviour {
         control_state_machine = new StateMachine();
         control_state_machine.ChangeState(new StateLinkNormalMovement(this));
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update() {
         animation_state_machine.Update();
         control_state_machine.Update();
         if (control_state_machine.IsFinished())
             control_state_machine.ChangeState(new StateLinkNormalMovement(this));
+        // CameraFollow.S.GetComponent<Camera>().ScreenToWorldPoint(
+        //Debug.DrawLine(new Vector3(0, 0, -5), );
+
+        Vector3[] pt = 
+        {
+            new Vector3(Utils.GetRoomX(transform.position.x), Utils.GetRoomY(transform.position.y), -5),
+            new Vector3(Utils.GetRoomX(transform.position.x) + Utils.roomSize.x, Utils.GetRoomY(transform.position.y), -5),
+            new Vector3(Utils.GetRoomX(transform.position.x) + Utils.roomSize.x, Utils.GetRoomY(transform.position.y) + Utils.roomSize.y, -5),
+            new Vector3(Utils.GetRoomX(transform.position.x), Utils.GetRoomY(transform.position.y) + Utils.roomSize.y, -5)
+        };
+
+        for (int i = 0; i < 4; i++)
+        {
+            int o = (i + 1) % 4;
+            Debug.DrawLine(pt[i], pt[o], i == 0 ? Color.blue : (i == 1 ? Color.green : Color.white));
+        }
+
+        if (Utils.CollidingWithTopEdge(transform.position) ||
+           Utils.CollidingWithBottomEdge(transform.position) ||
+           Utils.CollidingWithLeftEdge(transform.position) ||
+           Utils.CollidingWithRightEdge(transform.position))
+        {
+            GetComponent<SpriteRenderer>().color = Color.red;
+        }
+        else
+        {
+            GetComponent<SpriteRenderer>().color = Color.white;
+        }
+        //Debug.DrawLine(new Vector3(ShowMapOnCamera.S.screenSize.x, ShowMapOnCamera.S.screenSize.y, 5), new Vector3(0, 0, 5));
     }
 
     void OnTriggerEnter(Collider coll)

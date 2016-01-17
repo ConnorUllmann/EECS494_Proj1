@@ -35,11 +35,6 @@ public class Keese : Enemy {
     {
 
     }
-
-    void EnterNewCell()
-    {
-        GetComponent<Rigidbody>().velocity = RandomDirection();
-    }
 }
 
 public class StateKeeseNormal : State
@@ -52,11 +47,13 @@ public class StateKeeseNormal : State
     float animation_progression;
     float animation_start_time;
 
-    int fps_max = 3;
-    int fps;
+    float current_frame_index = 0;
     
     private float normal_seconds = 4; //Seconds of time before liftoff
     private float time_stopped; // Between half and all of normal_seconds.
+    private float time_max;
+
+    private Vector3 nextCell;
 
     public StateKeeseNormal(Keese _p, SpriteRenderer _renderer, Sprite[] _animation)
     {
@@ -65,12 +62,19 @@ public class StateKeeseNormal : State
         animation = _animation;
         animation_length = animation.Length;
 
-        time_stopped = (1 + Random.value) / 2 * (72 * normal_seconds);
+        time_max = time_stopped = (1 + Random.value) / 2 * (72 * normal_seconds);
 
-        var a = Random.value * 2 * Mathf.PI;
-        p.GetComponent<Rigidbody>().velocity = new Vector3(Mathf.Cos(a), Mathf.Sin(a), 0);
+        GoToRandomCell();
+
         if (this.animation_length <= 0)
             Debug.LogError("Empty animation submitted to state machine!");
+    }
+
+    private void GoToRandomCell()
+    {
+        var speed = Utils.RandomDirection8();
+        p.GetComponent<Rigidbody>().velocity = speed;
+        nextCell = new Vector3((int)p.transform.position.x + speed.x, (int)p.transform.position.y + speed.y, 0);
     }
 
     public override void OnUpdate(float time_delta_fraction)
@@ -80,46 +84,52 @@ public class StateKeeseNormal : State
             Debug.LogError("Empty animation submitted to state machine!");
             return;
         }
-
-        Debug.Log("Normal! " + time_stopped);
-        time_stopped -= time_delta_fraction;
+        
 
         Rigidbody rb = p.gameObject.GetComponent<Rigidbody>();
         Vector3 rbv = rb.velocity;
+        time_stopped -= time_delta_fraction;
         if (time_stopped <= 0)
         {
-            Debug.Log("Slow!");
-            var n = Mathf.Max(1 - 5 / rbv.magnitude, 0);
-            rbv.x *= n;
-            rbv.y *= n;
-            rbv.z *= n;
-
-            if (rbv.magnitude <= 0)
-                state_machine.ChangeState(new StateKeeseNormal(p, p.gameObject.GetComponent<SpriteRenderer>(), p.flap));
+            state_machine.ChangeState(new StateKeeseNormal(p, p.gameObject.GetComponent<SpriteRenderer>(), p.flap));
         }
         else
         {
-            if (rbv.magnitude > 0)
+            var val = time_stopped / time_max;
+            if(val <= 0.25f)
             {
-                var n = Mathf.Max(1 + 5 / rbv.magnitude, 0);
-                rbv.x *= n;
-                rbv.y *= n;
-                rbv.z *= n;
+                rbv = val / 0.25f * p.speed_max * rbv.normalized;
             }
-            if (rbv.magnitude >= p.speed_max)
+            else if(val <= 0.75f)
             {
-                var n = p.speed_max / rbv.magnitude;
-                rbv.x *= n;
-                rbv.y *= n;
-                rbv.z *= n;
+                rbv = p.speed_max * rbv.normalized;
+            }
+            else
+            {
+                rbv = (1 - (val - 0.75f) / 0.25f) * p.speed_max * rbv.normalized;
             }
         }
+
+        if (Utils.CollidingWithTopEdge(p.transform.position))
+            rbv.y = -Mathf.Abs(rbv.y);
+        if (Utils.CollidingWithBottomEdge(p.transform.position))
+            rbv.y = Mathf.Abs(rbv.y);
+        if (Utils.CollidingWithLeftEdge(p.transform.position))
+            rbv.x = Mathf.Abs(rbv.x);
+        if (Utils.CollidingWithRightEdge(p.transform.position))
+            rbv.x = -Mathf.Abs(rbv.x);
+
         rb.velocity = rbv;
 
-        fps = 6;// (int)(fps_max * rb.velocity.magnitude / 100);
-        // Modulus is necessary so we don't overshoot the length of the animation.
-        int current_frame_index = ((int)((Time.time - animation_start_time) / (1.0 / fps)) % animation_length);
-        renderer.sprite = animation[current_frame_index];
+        if((p.transform.position - )
+
+        // Modulus is necessary so we don't overshoot the length of the animation
+        var v = 0.1f * time_delta_fraction * rb.velocity.magnitude / p.speed_max;
+        Debug.Log(v);
+        current_frame_index += v;
+        while (current_frame_index > animation_length)
+            current_frame_index -= animation_length;
+        renderer.sprite = animation[(int)current_frame_index];
 
     }
 }

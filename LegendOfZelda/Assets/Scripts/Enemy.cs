@@ -14,10 +14,9 @@ public class Enemy : MonoBehaviour {
     {
 
         var temp = transform.position;
-        temp.x = Mathf.Floor(transform.position.x / 16) * 16;
-        temp.y = Mathf.Floor(transform.position.y / 16) * 16;
-        temp.z = Mathf.Floor(transform.position.z / 16) * 16;
-
+        temp.x = (int)temp.x + 0.5f;
+        temp.y = (int)temp.y + 0.5f;
+        transform.position = temp;
     }
 
     // Update is called once per frame
@@ -26,28 +25,4 @@ public class Enemy : MonoBehaviour {
 
     }
 
-    public static Vector3 RandomDirection()
-    {
-        int v = Mathf.FloorToInt(Random.value * 8);
-        switch (v)
-        {
-            case 0:
-                return new Vector3(1, 0, 0);
-            case 1:
-                return new Vector3(1, 1, 0);
-            case 2:
-                return new Vector3(0, 1, 0);
-            case 3:
-                return new Vector3(-1, 1, 0);
-            case 4:
-                return new Vector3(-1, 0, 0);
-            case 5:
-                return new Vector3(-1, -1, 0);
-            case 6:
-                return new Vector3(0, -1, 0);
-            case 7:
-                return new Vector3(1, -1, 0);
-        }
-        return new Vector3();
-    }
 }
