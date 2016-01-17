@@ -10,6 +10,9 @@ public class PlayerControl : MonoBehaviour {
 
     public float walking_velocity = 1.0f;
     public int rupee_count = 0;
+    public float health = 3.0f;
+    public bool bInvincible = false;
+    public float invincibilityTimer = 3.0f;
 
     public Sprite[] link_run_down;
 	public Sprite[] link_run_up;
@@ -44,6 +47,13 @@ public class PlayerControl : MonoBehaviour {
         control_state_machine.Update();
         if (control_state_machine.IsFinished())
             control_state_machine.ChangeState(new StateLinkNormalMovement(this));
+        if(bInvincible) {
+            invincibilityTimer -= Time.deltaTime;
+            if(invincibilityTimer <= 0) {
+                bInvincible = false;
+                invincibilityTimer = 3.0f;
+            }
+        }
     }
 
     void OnTriggerEnter(Collider coll)
@@ -53,6 +63,13 @@ public class PlayerControl : MonoBehaviour {
             case "Rupee":
                 Destroy(coll.gameObject);
                 rupee_count++;
+                break;
+
+            case "Enemy":
+                if(!bInvincible) {
+                    --health;
+                    bInvincible = true;
+                }
                 break;
         }
     }
