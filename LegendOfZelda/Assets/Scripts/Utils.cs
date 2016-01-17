@@ -23,6 +23,7 @@ public class Utils : MonoBehaviour {
     public static bool CollidingWithBottomEdge(Vector3 p) { return GetTileInRoomJ(p.y) <= 0; }
     public static bool CollidingWithLeftEdge(Vector3 p) { return GetTileInRoomI(p.x) <= 0; }
     public static bool CollidingWithRightEdge(Vector3 p) { return GetTileInRoomI(p.x) >= 15; }
+    public static bool CollidingWithAnyEdge(Vector3 p) { return CollidingWithTopEdge(p) || CollidingWithBottomEdge(p) || CollidingWithLeftEdge(p) || CollidingWithRightEdge(p); }
 
     //Returns a random vector pointing in one of the four cardinal directions
     public static Vector3 RandomDirection4()

@@ -12,10 +12,13 @@ public class Enemy : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+    }
 
+    public void GoToMiddleOfTile()
+    {
         var temp = transform.position;
-        temp.x = (int)temp.x + 0.5f;
-        temp.y = (int)temp.y + 0.5f;
+        temp.x = (int)temp.x;
+        temp.y = (int)temp.y;
         transform.position = temp;
     }
 

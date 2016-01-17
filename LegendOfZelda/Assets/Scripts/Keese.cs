@@ -9,6 +9,7 @@ public class Keese : Enemy {
     // Use this for initialization
     void Start ()
     {
+        GoToMiddleOfTile();
         speed_max = 3;
         state_machine = new StateMachine();
         state_machine.ChangeState(new StateKeeseNormal(this, GetComponent<SpriteRenderer>(), flap));
@@ -49,7 +50,7 @@ public class StateKeeseNormal : State
 
     float current_frame_index = 0;
     
-    private float normal_seconds = 4; //Seconds of time before liftoff
+    private float normal_seconds = 8; //Seconds of time before liftoff
     private float time_stopped; // Between half and all of normal_seconds.
     private float time_max;
 
@@ -70,11 +71,33 @@ public class StateKeeseNormal : State
             Debug.LogError("Empty animation submitted to state machine!");
     }
 
-    private void GoToRandomCell()
+    private void GoToCell(Vector3 speed)
     {
-        var speed = Utils.RandomDirection8();
+        speed.Normalize();
+        speed.x = Mathf.Round(speed.x);
+        speed.y = Mathf.Round(speed.y);
         p.GetComponent<Rigidbody>().velocity = speed;
         nextCell = new Vector3((int)p.transform.position.x + speed.x, (int)p.transform.position.y + speed.y, 0);
+
+    }
+    private void GoToRandomCell()
+    {
+        var pos = new Vector3((int)p.transform.position.x, (int)p.transform.position.y, p.transform.position.z);
+        var speed = Utils.RandomDirection8();
+        while (Utils.CollidingWithAnyEdge(pos + speed))
+            speed = Utils.RandomDirection8();
+        GoToCell(speed);
+    }
+    private void SetNextCellToMoveTo()
+    {
+        if(Random.value < 0.5)
+        {
+            GoToCell(p.GetComponent<Rigidbody>().velocity.normalized);
+        }
+        else
+        {
+            GoToRandomCell();
+        }
     }
 
     public override void OnUpdate(float time_delta_fraction)
@@ -84,52 +107,65 @@ public class StateKeeseNormal : State
             Debug.LogError("Empty animation submitted to state machine!");
             return;
         }
-        
+
+        var pos = p.transform.position;
+
 
         Rigidbody rb = p.gameObject.GetComponent<Rigidbody>();
         Vector3 rbv = rb.velocity;
         time_stopped -= time_delta_fraction;
         if (time_stopped <= 0)
         {
-            state_machine.ChangeState(new StateKeeseNormal(p, p.gameObject.GetComponent<SpriteRenderer>(), p.flap));
+            state_machine.ChangeState(new StateKeeseStopped(p));
         }
         else
         {
             var val = time_stopped / time_max;
-            if(val <= 0.25f)
-            {
+            if (val <= 0.25f)
                 rbv = val / 0.25f * p.speed_max * rbv.normalized;
-            }
-            else if(val <= 0.75f)
-            {
+            else if (val <= 0.75f)
                 rbv = p.speed_max * rbv.normalized;
-            }
             else
-            {
                 rbv = (1 - (val - 0.75f) / 0.25f) * p.speed_max * rbv.normalized;
-            }
         }
 
         if (Utils.CollidingWithTopEdge(p.transform.position))
+        {
             rbv.y = -Mathf.Abs(rbv.y);
+            GoToRandomCell();
+        }
         if (Utils.CollidingWithBottomEdge(p.transform.position))
+        {
             rbv.y = Mathf.Abs(rbv.y);
+            GoToRandomCell();
+        }
         if (Utils.CollidingWithLeftEdge(p.transform.position))
+        {
             rbv.x = Mathf.Abs(rbv.x);
+            GoToRandomCell();
+        }
         if (Utils.CollidingWithRightEdge(p.transform.position))
+        {
             rbv.x = -Mathf.Abs(rbv.x);
+            GoToRandomCell();
+        }
 
         rb.velocity = rbv;
-
-        if((p.transform.position - )
+        
+        if (Mathf.Abs(p.transform.position.x - nextCell.x) <= 0.2f || Mathf.Abs(p.transform.position.y - nextCell.y) <= 0.25f)
+        {
+            p.transform.position = nextCell;
+            SetNextCellToMoveTo();
+        }
 
         // Modulus is necessary so we don't overshoot the length of the animation
         var v = 0.1f * time_delta_fraction * rb.velocity.magnitude / p.speed_max;
-        Debug.Log(v);
         current_frame_index += v;
         while (current_frame_index > animation_length)
             current_frame_index -= animation_length;
         renderer.sprite = animation[(int)current_frame_index];
+
+        p.transform.position = pos;
 
     }
 }
@@ -138,7 +174,7 @@ public class StateKeeseStopped : State
 {
     Keese p;
 
-    private float pause_seconds = 2;
+    private float pause_seconds = 3;
     private float time_stopped; // Between half and all of pause_seconds.
 
     public StateKeeseStopped(Keese _p)
@@ -149,6 +185,8 @@ public class StateKeeseStopped : State
 
     public override void OnUpdate(float time_delta_fraction)
     {
+        p.GetComponent<Rigidbody>().velocity = new Vector3();
+
         time_stopped -= time_delta_fraction;
         if (time_stopped <= 0)
             state_machine.ChangeState(new StateKeeseNormal(p, p.gameObject.GetComponent<SpriteRenderer>(), p.flap));
