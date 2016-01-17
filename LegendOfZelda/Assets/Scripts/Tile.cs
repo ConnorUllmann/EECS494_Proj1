@@ -65,13 +65,15 @@ public class Tile : MonoBehaviour {
         bc.enabled = true;
         char c = ShowMapOnCamera.S.collisionS[tileNum];
         switch (c) {
-        case 'S': // Solid
-            bc.center = Vector3.zero;
-            bc.size = Vector3.one;
-            break;
-        default:
-            bc.enabled = false;
-            break;
+            case 'S': // Solid
+                bc.center = Vector3.zero;
+                bc.size = Vector3.one;
+                break;
+            case 'D': //Door
+                break;
+            default:
+                bc.enabled = false;
+                break;
         }
 	}	
 }
