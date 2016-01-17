@@ -15,7 +15,7 @@ public class PlayerControl : MonoBehaviour {
     public float invincibilityTimer = 3.0f;
 
     private float distanceToNextDoor = 3.5f;
-    public float doorMoveOffset = 0.6f;
+    public float doorMoveOffset = 0.7f;
 
     public Sprite[] link_run_down;
 	public Sprite[] link_run_up;
@@ -94,12 +94,14 @@ public class PlayerControl : MonoBehaviour {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, distanceToNextDoor);
         GameObject nextDoor = new GameObject();
         foreach (Collider c in hitColliders) {
-            if (c.gameObject.tag == "Door" && Vector3.Distance(transform.position, c.transform.position) > 1.0f) {
+            if (c.gameObject.tag == "Door" && Vector3.Distance(transform.position, c.transform.position) > 2.0f) {
                 nextDoor = c.gameObject;
             }
         }
 
         Vector3 directionOffset = nextDoor.transform.position - transform.position;
-        transform.position = nextDoor.transform.position + (directionOffset / directionOffset.magnitude) * doorMoveOffset;
+
+        Vector3 newPos = nextDoor.transform.position + ((directionOffset / directionOffset.magnitude) * doorMoveOffset);
+        transform.position = newPos;
     }
 }
