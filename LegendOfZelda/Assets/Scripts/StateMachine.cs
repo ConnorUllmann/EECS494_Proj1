@@ -216,11 +216,20 @@ public class StateLinkNormalMovement : State
 
     public override void OnUpdate(float time_delta_fraction)
     {
+        Vector3 pos = p.transform.position;
+
         float h_input = Input.GetAxis("Horizontal");
         float v_input = Input.GetAxis("Vertical");
 
+        if(v_input != 0.0f)
+        {
+            pos.x += (Mathf.Round(pos.x * 2) / 2 - pos.x) / 2;
+            h_input = 0.0f;
+        }
         if (h_input != 0.0f)
-            v_input = 0;
+        {
+            pos.y += (Mathf.Round(pos.y * 2) / 2 - pos.y) / 2;
+        }
 
         p.GetComponent<Rigidbody>().velocity = new Vector3(h_input, v_input, 0) * p.walking_velocity;
 
@@ -235,6 +244,8 @@ public class StateLinkNormalMovement : State
 
         if (Input.GetKeyDown(KeyCode.Z))
             state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab, 15));
+
+        p.transform.position = pos;
     }
 }
 
