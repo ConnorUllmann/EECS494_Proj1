@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum Direction {NORTH, EAST, SOUTH, WEST};
+public enum Direction {NORTH, EAST, SOUTH, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST};
 public enum EntityState {NORMAL, ATTACKING};
 
 public class PlayerControl : MonoBehaviour {
