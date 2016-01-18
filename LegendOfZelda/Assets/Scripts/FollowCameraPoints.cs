@@ -19,6 +19,7 @@ public class FollowCameraPoints : MonoBehaviour {
         Vector3 p0, p1;
         p0 = transform.position;
         p1 = CameraPoints.GetClosestCameraPoint().transform.position + offset;
+        
 
         transform.position = (1 - easing) * p0 + easing * p1;
     }

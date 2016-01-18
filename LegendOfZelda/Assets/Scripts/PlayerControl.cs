@@ -2,7 +2,7 @@
 using System.Collections;
 
 public enum Direction {NORTH, EAST, SOUTH, WEST};
-public enum EntityState {NORMAL, ATTACKING};
+public enum EntityState {NORMAL, ATTACKING, STUNNED};
 
 public class PlayerControl : MonoBehaviour {
 
@@ -12,7 +12,10 @@ public class PlayerControl : MonoBehaviour {
     public int rupee_count = 0;
     public float health = 3.0f;
     public bool bInvincible = false;
-    public float invincibilityTimer = 3.0f;
+    public float maxInvincibilityTimer = 3.0f;
+    private float invincibiltyTimer = 0.0f;
+
+    public float stunTimer = 15.0f;
 
     private float distanceToNextDoor = 3.5f;
     public float doorMoveOffset = 0.7f;
@@ -61,10 +64,10 @@ public class PlayerControl : MonoBehaviour {
         if (control_state_machine.IsFinished())
             control_state_machine.ChangeState(new StateLinkNormalMovement(this));
         if(bInvincible) {
-            invincibilityTimer -= Time.deltaTime;
-            if(invincibilityTimer <= 0) {
+            invincibiltyTimer -= Time.deltaTime;
+            if(invincibiltyTimer <= 0) {
                 bInvincible = false;
-                invincibilityTimer = 3.0f;
+                invincibiltyTimer = maxInvincibilityTimer;
             }
         }
     }
@@ -82,7 +85,11 @@ public class PlayerControl : MonoBehaviour {
                 if(!bInvincible) {
                     --health;
                     bInvincible = true;
+
+                    current_state = EntityState.STUNNED;
+                    control_state_machine.ChangeState(new StateLinkStunned(this, stunTimer));
                 }
+
                 break;
             case "Door":
                 MoveToNextRoom();

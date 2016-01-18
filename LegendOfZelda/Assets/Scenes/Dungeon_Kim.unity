@@ -158,6 +158,48 @@ RectTransform:
   m_AnchoredPosition: {x: 95.6, y: -19.2}
   m_SizeDelta: {x: 107.1, y: 17.7}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1001 &183857638
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 415864, guid: 28f16d6eafd6d0e4790f1481a177c6f8, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 39.803867
+      objectReference: {fileID: 0}
+    - target: {fileID: 415864, guid: 28f16d6eafd6d0e4790f1481a177c6f8, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 6.9965787
+      objectReference: {fileID: 0}
+    - target: {fileID: 415864, guid: 28f16d6eafd6d0e4790f1481a177c6f8, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 415864, guid: 28f16d6eafd6d0e4790f1481a177c6f8, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 415864, guid: 28f16d6eafd6d0e4790f1481a177c6f8, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 415864, guid: 28f16d6eafd6d0e4790f1481a177c6f8, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 415864, guid: 28f16d6eafd6d0e4790f1481a177c6f8, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 415864, guid: 28f16d6eafd6d0e4790f1481a177c6f8, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 28f16d6eafd6d0e4790f1481a177c6f8, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &215100842
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,7 +394,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 7
 --- !u!1 &909927667
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,7 +455,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
 --- !u!54 &909927670
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -456,7 +498,8 @@ MonoBehaviour:
   rupee_count: 0
   health: 3
   bInvincible: 0
-  invincibilityTimer: 3
+  maxInvincibilityTimer: 3
+  stunTimer: 15
   doorMoveOffset: 0.6
   link_run_down:
   - {fileID: 21300000, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
@@ -482,10 +525,18 @@ MonoBehaviour:
   link_run_left_invincible:
   - {fileID: 21300010, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
   - {fileID: 21300042, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
-  down_invincible: []
-  up_invincible: []
-  right_invincible: []
-  left_invincible: []
+  down_invincible:
+  - {fileID: 21300008, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
+  - {fileID: 21300016, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
+  up_invincible:
+  - {fileID: 21300012, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
+  - {fileID: 21300020, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
+  right_invincible:
+  - {fileID: 21300014, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
+  - {fileID: 21300022, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
+  left_invincible:
+  - {fileID: 21300010, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
+  - {fileID: 21300018, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
   current_state: 0
   current_direction: 2
   selected_weapon_prefab: {fileID: 198378, guid: 5086923027139b04d9b760050b38ee67,
@@ -578,7 +629,7 @@ RectTransform:
   - {fileID: 56695148}
   - {fileID: 1649208983}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -651,7 +702,7 @@ GameObject:
   - 65: {fileID: 1609605587}
   m_Layer: 0
   m_Name: Rupee
-  m_TagString: Enemy
+  m_TagString: Rupee
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -709,7 +760,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
 --- !u!1 &1649208982
 GameObject:
   m_ObjectHideFlags: 0
@@ -910,4 +961,4 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
