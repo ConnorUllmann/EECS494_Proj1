@@ -1,13 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Enemy : MonoBehaviour {
+public class Enemy : MonoBehaviour
+{
 
     public Direction current_direction = Direction.SOUTH;
     public EntityState current_state = EntityState.NORMAL;
 
     public StateMachine state_machine;
     public float speed_max;
+    public float health = 1.0f;
 
     // Use this for initialization
     void Start()
@@ -28,4 +30,8 @@ public class Enemy : MonoBehaviour {
 
     }
 
+
+    void OnTriggerEnter(Collider coll) {
+
+    }
 }
