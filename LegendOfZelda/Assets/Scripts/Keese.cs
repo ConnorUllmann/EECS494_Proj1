@@ -21,6 +21,7 @@ public class Keese : Enemy {
         state_machine.Update();
         if (state_machine.IsFinished())
             state_machine.ChangeState(new StateKeeseNormal(this, GetComponent<SpriteRenderer>(), flap));
+        base.Update();
     }
 
 
