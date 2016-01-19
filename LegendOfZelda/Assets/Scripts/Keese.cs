@@ -15,15 +15,14 @@ public class Keese : Enemy {
         state_machine.ChangeState(new StateKeeseNormal(this, GetComponent<SpriteRenderer>(), flap));
     }
 
-    public override void Update()
+    void Update()
     {
         state_machine.Update();
         if (state_machine.IsFinished())
             state_machine.ChangeState(new StateKeeseNormal(this, GetComponent<SpriteRenderer>(), flap));
-        base.Update();
     }
 
-    /*void OnColliderEnter(Collision coll)
+    void OnColliderEnter(Collision coll)
     {
         switch (coll.gameObject.tag)
         {
@@ -31,9 +30,7 @@ public class Keese : Enemy {
                 HitPlayer();
                 break;
         }
-
-        
-    }*/
+    }
 
     void HitPlayer()
     {

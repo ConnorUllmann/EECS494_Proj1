@@ -8,7 +8,6 @@ public class Enemy : MonoBehaviour {
 
     public StateMachine state_machine;
     public float speed_max;
-    public float health = 1.0f;
 
     // Use this for initialization
     void Start()
@@ -24,18 +23,9 @@ public class Enemy : MonoBehaviour {
     }
 
     // Update is called once per frame
-    public virtual void Update()
+    void Update()
     {
 
-        if (health <= 0 ) {
-            Destroy(this.gameObject);
-        }
-    }
-
-    void OnTriggerEnter(Collider coll) {
-        if(coll.gameObject.tag == "Weapon") {
-            --health;
-        }
     }
 
 }
