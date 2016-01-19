@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum Direction {NORTH, EAST, SOUTH, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST};
-public enum EntityState {NORMAL, ATTACKING};
+public enum Direction {NORTH, EAST, SOUTH, WEST};
+public enum EntityState {NORMAL, ATTACKING, STUNNED};
 
 public class PlayerControl : MonoBehaviour {
 
@@ -10,13 +10,32 @@ public class PlayerControl : MonoBehaviour {
 
     public float walking_velocity = 1.0f;
     public int rupee_count = 0;
+    public float health = 3.0f;
+    public bool bInvincible = false;
+    public float maxInvincibilityTimer = 3.0f;
+    private float invincibiltyTimer = 0.0f;
+
+    public float stunTimer = 15.0f;
+
+    private float distanceToNextDoor = 3.5f;
+    public float doorMoveOffset = 0.7f;
 
     public Sprite[] link_run_down;
 	public Sprite[] link_run_up;
 	public Sprite[] link_run_right;
 	public Sprite[] link_run_left;
 
-	StateMachine animation_state_machine;
+    public Sprite[] link_run_down_invincible;
+    public Sprite[] link_run_up_invincible;
+    public Sprite[] link_run_right_invincible;
+    public Sprite[] link_run_left_invincible;
+
+    public Sprite[] down_invincible;
+    public Sprite[] up_invincible;
+    public Sprite[] right_invincible;
+    public Sprite[] left_invincible;
+
+    StateMachine animation_state_machine;
 	StateMachine control_state_machine;
 	
 	public EntityState current_state = EntityState.NORMAL;
@@ -25,8 +44,8 @@ public class PlayerControl : MonoBehaviour {
 	public GameObject selected_weapon_prefab;
 
 
-    // Use this for initialization
-    void Start () {
+	// Use this for initialization
+	void Start () {
         if (S != null)
             Debug.LogError("Multiple players!");
         S = this;
@@ -37,42 +56,20 @@ public class PlayerControl : MonoBehaviour {
         control_state_machine = new StateMachine();
         control_state_machine.ChangeState(new StateLinkNormalMovement(this));
     }
-
-    // Update is called once per frame
-    void Update() {
+	
+	// Update is called once per frame
+	void Update () {
         animation_state_machine.Update();
         control_state_machine.Update();
         if (control_state_machine.IsFinished())
             control_state_machine.ChangeState(new StateLinkNormalMovement(this));
-        // CameraFollow.S.GetComponent<Camera>().ScreenToWorldPoint(
-        //Debug.DrawLine(new Vector3(0, 0, -5), );
-
-        Vector3[] pt = 
-        {
-            new Vector3(Utils.GetRoomX(transform.position.x), Utils.GetRoomY(transform.position.y), -5),
-            new Vector3(Utils.GetRoomX(transform.position.x) + Utils.roomSize.x, Utils.GetRoomY(transform.position.y), -5),
-            new Vector3(Utils.GetRoomX(transform.position.x) + Utils.roomSize.x, Utils.GetRoomY(transform.position.y) + Utils.roomSize.y, -5),
-            new Vector3(Utils.GetRoomX(transform.position.x), Utils.GetRoomY(transform.position.y) + Utils.roomSize.y, -5)
-        };
-
-        for (int i = 0; i < 4; i++)
-        {
-            int o = (i + 1) % 4;
-            Debug.DrawLine(pt[i], pt[o], i == 0 ? Color.blue : (i == 1 ? Color.green : Color.white));
+        if(bInvincible) {
+            invincibiltyTimer -= Time.deltaTime;
+            if(invincibiltyTimer <= 0) {
+                bInvincible = false;
+                invincibiltyTimer = maxInvincibilityTimer;
+            }
         }
-
-        if (Utils.CollidingWithTopEdge(transform.position) ||
-           Utils.CollidingWithBottomEdge(transform.position) ||
-           Utils.CollidingWithLeftEdge(transform.position) ||
-           Utils.CollidingWithRightEdge(transform.position))
-        {
-            GetComponent<SpriteRenderer>().color = Color.red;
-        }
-        else
-        {
-            GetComponent<SpriteRenderer>().color = Color.white;
-        }
-        //Debug.DrawLine(new Vector3(ShowMapOnCamera.S.screenSize.x, ShowMapOnCamera.S.screenSize.y, 5), new Vector3(0, 0, 5));
     }
 
     void OnTriggerEnter(Collider coll)
@@ -83,6 +80,35 @@ public class PlayerControl : MonoBehaviour {
                 Destroy(coll.gameObject);
                 rupee_count++;
                 break;
+
+            case "Enemy":
+                if(!bInvincible) {
+                    --health;
+                    bInvincible = true;
+
+                    current_state = EntityState.STUNNED;
+                    control_state_machine.ChangeState(new StateLinkStunned(this, stunTimer));
+                }
+
+                break;
+            case "Door":
+                MoveToNextRoom();
+                break;
         }
+    }
+
+    void MoveToNextRoom() {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, distanceToNextDoor);
+        GameObject nextDoor = new GameObject();
+        foreach (Collider c in hitColliders) {
+            if (c.gameObject.tag == "Door" && Vector3.Distance(transform.position, c.transform.position) > 2.0f) {
+                nextDoor = c.gameObject;
+            }
+        }
+
+        Vector3 directionOffset = nextDoor.transform.position - transform.position;
+
+        Vector3 newPos = nextDoor.transform.position + ((directionOffset / directionOffset.magnitude) * doorMoveOffset);
+        transform.position = newPos;
     }
 }
