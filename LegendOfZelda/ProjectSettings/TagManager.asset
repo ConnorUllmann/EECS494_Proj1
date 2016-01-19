@@ -4,9 +4,6 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Rupee
-  - Door
-  - Hero
   - Enemy
   layers:
   - Default

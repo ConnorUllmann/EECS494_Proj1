@@ -25,18 +25,10 @@ public class Utils : MonoBehaviour {
     public static bool CollidingWithRightEdge(Vector3 p) { return GetTileInRoomI(p.x) >= 15; }
     public static bool CollidingWithAnyEdge(Vector3 p) { return CollidingWithTopEdge(p) || CollidingWithBottomEdge(p) || CollidingWithLeftEdge(p) || CollidingWithRightEdge(p); }
 
-    public static bool CollidingWithTopWall(Vector3 p) { return GetTileInRoomJ(p.y) >= 9; }
-    public static bool CollidingWithBottomWall(Vector3 p) { return GetTileInRoomJ(p.y) <= 1; }
-    public static bool CollidingWithLeftWall(Vector3 p) { return GetTileInRoomI(p.x) <= 1; }
-    public static bool CollidingWithRightWall(Vector3 p) { return GetTileInRoomI(p.x) >= 14; }
-    public static bool CollidingWithAnyWall(Vector3 p) { return CollidingWithTopWall(p) || CollidingWithBottomWall(p) || CollidingWithLeftWall(p) || CollidingWithRightWall(p); }
-
-    public static float Dot(Vector3 a, Vector3 b) { return a.x * b.x + a.y * b.y + a.z * b.z; }
-
     //Returns a random vector pointing in one of the four cardinal directions
     public static Vector3 RandomDirection4()
     {
-        int v = Mathf.FloorToInt(Random.value * 4) % 4;
+        int v = Mathf.FloorToInt(Random.value * 4);
         switch (v)
         {
             case 0:
@@ -49,12 +41,6 @@ public class Utils : MonoBehaviour {
                 return new Vector3(0, -1, 0);
         }
         return new Vector3();
-    }
-
-    //Returns the sign of the number (0 = 0)
-    public static float Sign(float n)
-    {
-        return n < 0 ? -1 : (n > 0 ? 1 : 0);
     }
 
     //Returns a random vector corresponding to one of the 8 directions (both cardinal and diagonal)

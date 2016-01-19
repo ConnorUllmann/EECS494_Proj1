@@ -17,8 +17,8 @@ public class Enemy : MonoBehaviour {
     public void GoToMiddleOfTile()
     {
         var temp = transform.position;
-        temp.x = (int)Mathf.Round(temp.x);
-        temp.y = (int)Mathf.Round(temp.y);
+        temp.x = (int)temp.x;
+        temp.y = (int)temp.y;
         transform.position = temp;
     }
 

@@ -151,11 +151,10 @@ public class StateKeeseNormal : State
         }
 
         rb.velocity = rbv;
-
         
-        if (Mathf.Abs(p.transform.position.x - nextCell.x) <= 0.4f && Mathf.Abs(p.transform.position.y - nextCell.y) <= 0.4f)
+        if (Mathf.Abs(p.transform.position.x - nextCell.x) <= 0.2f || Mathf.Abs(p.transform.position.y - nextCell.y) <= 0.25f)
         {
-            //pos = nextCell;
+            p.transform.position = nextCell;
             SetNextCellToMoveTo();
         }
 
