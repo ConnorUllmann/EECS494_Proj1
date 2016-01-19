@@ -15,15 +15,14 @@ public class Keese : Enemy {
         state_machine.ChangeState(new StateKeeseNormal(this, GetComponent<SpriteRenderer>(), flap));
     }
 
-    public override void Update()
+    void Update()
     {
         state_machine.Update();
         if (state_machine.IsFinished())
             state_machine.ChangeState(new StateKeeseNormal(this, GetComponent<SpriteRenderer>(), flap));
-        base.Update();
     }
 
-    /*void OnColliderEnter(Collision coll)
+    void OnColliderEnter(Collision coll)
     {
         switch (coll.gameObject.tag)
         {
@@ -31,9 +30,7 @@ public class Keese : Enemy {
                 HitPlayer();
                 break;
         }
-
-        
-    }*/
+    }
 
     void HitPlayer()
     {
@@ -87,7 +84,7 @@ public class StateKeeseNormal : State
     {
         var pos = new Vector3((int)p.transform.position.x, (int)p.transform.position.y, p.transform.position.z);
         var speed = Utils.RandomDirection8();
-        while (Utils.CollidingWithAnyEdge(pos + speed))
+        while (Utils.CollidingWithAnyWall(pos + speed))
             speed = Utils.RandomDirection8();
         GoToCell(speed);
     }
@@ -132,32 +129,33 @@ public class StateKeeseNormal : State
                 rbv = (1 - (val - 0.75f) / 0.25f) * p.speed_max * rbv.normalized;
         }
 
-        if (Utils.CollidingWithTopEdge(p.transform.position))
+        if (Utils.CollidingWithTopWall(p.transform.position))
         {
             rbv.y = -Mathf.Abs(rbv.y);
             GoToRandomCell();
         }
-        if (Utils.CollidingWithBottomEdge(p.transform.position))
+        if (Utils.CollidingWithBottomWall(p.transform.position))
         {
             rbv.y = Mathf.Abs(rbv.y);
             GoToRandomCell();
         }
-        if (Utils.CollidingWithLeftEdge(p.transform.position))
+        if (Utils.CollidingWithLeftWall(p.transform.position))
         {
             rbv.x = Mathf.Abs(rbv.x);
             GoToRandomCell();
         }
-        if (Utils.CollidingWithRightEdge(p.transform.position))
+        if (Utils.CollidingWithRightWall(p.transform.position))
         {
             rbv.x = -Mathf.Abs(rbv.x);
             GoToRandomCell();
         }
 
         rb.velocity = rbv;
+
         
-        if (Mathf.Abs(p.transform.position.x - nextCell.x) <= 0.2f || Mathf.Abs(p.transform.position.y - nextCell.y) <= 0.25f)
+        if (Mathf.Abs(p.transform.position.x - nextCell.x) <= 0.4f && Mathf.Abs(p.transform.position.y - nextCell.y) <= 0.4f)
         {
-            p.transform.position = nextCell;
+            //pos = nextCell;
             SetNextCellToMoveTo();
         }
 

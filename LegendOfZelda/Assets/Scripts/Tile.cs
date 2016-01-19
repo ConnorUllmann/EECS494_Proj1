@@ -1,7 +1,12 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Tile : MonoBehaviour {
+
+    public static List<List<Tile>> tiles = new List<List<Tile>>();
+
+
     static Sprite[]         spriteArray;
 
     public Texture2D        spriteTexture;
@@ -24,11 +29,40 @@ public class Tile : MonoBehaviour {
         //mat = rend.material;
 	}
 
+    //Returns the tile at the given position.
+    public static Tile GetTile(Vector3 pos)
+    {
+        int x_ = (int)pos.x;
+        int y_ = (int)pos.y;
+        //Debug.Log("(" + x_ + ", " + y_ + ") " + pos);
+        if (x_ >= tiles.Count || y_ >= tiles[x_].Count)
+            return null;
+        return tiles[x_][y_];
+    }
+    //Returns whether the tile at the given position is walkable.
+    public static bool Solid(Vector3 pos)
+    {
+        var tile = GetTile(pos);
+        var collider = tile.GetComponent<BoxCollider>();
+        return tile != null && collider != null && collider.enabled;
+    }
+
 	public void SetTile(int eX, int eY, int eTileNum = -1) {
 		if (x == eX && y == eY) return; // Don't move this if you don't have to. - JB
 
-		x = eX;
-		y = eY;
+        x = eX;
+        y = eY;
+
+        while (x >= tiles.Count)
+        {
+            tiles.Add(new List<Tile>());
+        }
+        while(y >= tiles[x].Count)
+        {
+            tiles[x].Add(null);
+        }
+        tiles[x][y] = this;
+
 		transform.localPosition = new Vector3(x, y, 0);
         gameObject.name = x.ToString("D3")+"x"+y.ToString("D3");
 
