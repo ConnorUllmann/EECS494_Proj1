@@ -61,39 +61,72 @@ public class State
 
 // A State that takes a renderer and a sprite, and implements idling behavior.
 // The state is capable of transitioning to a walking state upon key press.
-public class StateIdleWithSprite : State
-{
-	PlayerControl pc;
-	SpriteRenderer renderer;
-	Sprite sprite;
-	
-	public StateIdleWithSprite(PlayerControl pc, SpriteRenderer renderer, Sprite sprite)
-	{
-		this.pc = pc;
-		this.renderer = renderer;
-		this.sprite = sprite;
-	}
-	
-	public override void OnStart()
-	{
-		renderer.sprite = sprite;
-	}
-	
-	public override void OnUpdate(float time_delta_fraction)
-	{
-		if(pc.current_state == EntityState.ATTACKING)
-			return;
+public class StateIdleWithSprite : State {
+    PlayerControl pc;
+    SpriteRenderer renderer;
+    Sprite sprite;
+    bool prevBInvcible;
+    KeyCode key;
 
-		// Transition to walking animations on key press.
-		if(Input.GetKeyDown(KeyCode.DownArrow))
-			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_down, 6, KeyCode.DownArrow));
-		if(Input.GetKeyDown(KeyCode.UpArrow))
-			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_up, 6, KeyCode.UpArrow));
-		if(Input.GetKeyDown(KeyCode.RightArrow))
-			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_right, 6, KeyCode.RightArrow));
-		if(Input.GetKeyDown(KeyCode.LeftArrow))
-			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_left, 6, KeyCode.LeftArrow));
-	}
+    public StateIdleWithSprite(PlayerControl pc, SpriteRenderer renderer, Sprite sprite, KeyCode key = KeyCode.DownArrow) {
+        this.pc = pc;
+        this.renderer = renderer;
+        this.sprite = sprite;
+        prevBInvcible = pc.bInvincible;
+        this.key = key;
+    }
+
+    public override void OnStart() {
+        renderer.sprite = sprite;
+    }
+
+    public override void OnUpdate(float time_delta_fraction) {
+        if (pc.current_state == EntityState.ATTACKING)
+            return;
+
+        // Transition to walking animations on key press.
+        if (!pc.bInvincible) {
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+                state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_down, 6, KeyCode.DownArrow));
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+                state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_up, 6, KeyCode.UpArrow));
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+                state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_right, 6, KeyCode.RightArrow));
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+                state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_left, 6, KeyCode.LeftArrow));
+        } else if (pc.bInvincible) {
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+                state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_down_invincible, 6, KeyCode.DownArrow));
+            else if (Input.GetKeyDown(KeyCode.UpArrow))
+                state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_up_invincible, 6, KeyCode.UpArrow));
+            else if (Input.GetKeyDown(KeyCode.RightArrow))
+                state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_right_invincible, 6, KeyCode.RightArrow));
+            else if (Input.GetKeyDown(KeyCode.LeftArrow))
+                state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_left_invincible, 6, KeyCode.LeftArrow));
+
+            else {
+                switch (key) {
+                    case KeyCode.DownArrow:
+                        state_machine.ChangeState(new StateIdleInvincibleAnimation(pc, renderer, pc.down_invincible, 6, key));
+                        break;
+                    case KeyCode.UpArrow:
+                        state_machine.ChangeState(new StateIdleInvincibleAnimation(pc, renderer, pc.up_invincible, 6, key));
+                        break;
+                    case KeyCode.RightArrow:
+                        state_machine.ChangeState(new StateIdleInvincibleAnimation(pc, renderer, pc.right_invincible, 6, key));
+                        break;
+                    case KeyCode.LeftArrow:
+                        state_machine.ChangeState(new StateIdleInvincibleAnimation(pc, renderer, pc.left_invincible, 6, key));
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+
+
+    }
 }
 
 // A State for playing an animation until a particular key is released.
@@ -108,6 +141,7 @@ public class StatePlayAnimationForHeldKey : State
 	float animation_progression;
 	float animation_start_time;
 	int fps;
+    bool prevBInvincible;
 	
 	public StatePlayAnimationForHeldKey(PlayerControl pc, SpriteRenderer renderer, Sprite[] animation, int fps, KeyCode key)
 	{
@@ -117,7 +151,8 @@ public class StatePlayAnimationForHeldKey : State
 		this.animation = animation;
 		this.animation_length = animation.Length;
 		this.fps = fps;
-		
+        prevBInvincible = pc.bInvincible;
+
 		if(this.animation_length <= 0)
 			Debug.LogError("Empty animation submitted to state machine!");
 	}
@@ -141,21 +176,146 @@ public class StatePlayAnimationForHeldKey : State
 		// Modulus is necessary so we don't overshoot the length of the animation.
 		int current_frame_index = ((int)((Time.time - animation_start_time) / (1.0 / fps)) % animation_length);
 		renderer.sprite = animation[current_frame_index];
-		
-		// If another key is pressed, we need to transition to a different walking animation.
-		if(Input.GetKeyDown(KeyCode.DownArrow))
-			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_down, 6, KeyCode.DownArrow));
-		else if(Input.GetKeyDown(KeyCode.UpArrow))
-			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_up, 6, KeyCode.UpArrow));
-		else if(Input.GetKeyDown(KeyCode.RightArrow))
-			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_right, 6, KeyCode.RightArrow));
-		else if(Input.GetKeyDown(KeyCode.LeftArrow))
-			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_left, 6, KeyCode.LeftArrow));
-		
-		// If we detect the specified key has been released, return to the idle state.
-		else if(!Input.GetKey(key))
-			state_machine.ChangeState(new StateIdleWithSprite(pc, renderer, animation[1]));
+
+        // Transition to walking animations on key press.
+        if (!pc.bInvincible) {
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+                state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_down, 6, KeyCode.DownArrow));
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+                state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_up, 6, KeyCode.UpArrow));
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+                state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_right, 6, KeyCode.RightArrow));
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+                state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_left, 6, KeyCode.LeftArrow));
+        } else if (pc.bInvincible) {
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+                state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_down_invincible, 6, KeyCode.DownArrow));
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+                state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_up_invincible, 6, KeyCode.UpArrow));
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+                state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_right_invincible, 6, KeyCode.RightArrow));
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+                state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_left_invincible, 6, KeyCode.LeftArrow));
+        }
+
+        if(pc.bInvincible != prevBInvincible) {
+            if (!pc.bInvincible) {
+                if (Input.GetKey(KeyCode.DownArrow))
+                    state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_down, 6, KeyCode.DownArrow));
+                if (Input.GetKey(KeyCode.UpArrow))
+                    state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_up, 6, KeyCode.UpArrow));
+                if (Input.GetKey(KeyCode.RightArrow))
+                    state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_right, 6, KeyCode.RightArrow));
+                if (Input.GetKey(KeyCode.LeftArrow))
+                    state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_left, 6, KeyCode.LeftArrow));
+            } else if (pc.bInvincible) {
+                if (Input.GetKey(KeyCode.DownArrow))
+                    state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_down_invincible, 6, KeyCode.DownArrow));
+                if (Input.GetKey(KeyCode.UpArrow))
+                    state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_up_invincible, 6, KeyCode.UpArrow));
+                if (Input.GetKey(KeyCode.RightArrow))
+                    state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_right_invincible, 6, KeyCode.RightArrow));
+                if (Input.GetKey(KeyCode.LeftArrow))
+                    state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_left_invincible, 6, KeyCode.LeftArrow));
+            }
+        }
+
+          // If we detect the specified key has been released, return to the idle state.
+          if(!Input.GetKey(key) && !pc.bInvincible)
+			state_machine.ChangeState(new StateIdleWithSprite(pc, renderer, animation[1], key));
+          else if(!Input.GetKey(key) && pc.bInvincible) {
+            switch (key) {
+                case KeyCode.DownArrow:
+                    state_machine.ChangeState(new StateIdleInvincibleAnimation(pc, renderer, pc.down_invincible, 6, key));
+                    break;
+                case KeyCode.UpArrow:
+                    state_machine.ChangeState(new StateIdleInvincibleAnimation(pc, renderer, pc.up_invincible, 6, key));
+                    break;
+                case KeyCode.RightArrow:
+                    state_machine.ChangeState(new StateIdleInvincibleAnimation(pc, renderer, pc.right_invincible, 6, key));
+                    break;
+                case KeyCode.LeftArrow:
+                    state_machine.ChangeState(new StateIdleInvincibleAnimation(pc, renderer, pc.left_invincible, 6, key));
+                    break;
+                default:
+                    break;
+            }
+        }
 	}
+}
+
+public class StateIdleInvincibleAnimation : State {
+
+    PlayerControl pc;
+    SpriteRenderer renderer;
+    Sprite[] animation;
+    int animation_length;
+    KeyCode key;
+    float animation_progression;
+    float animation_start_time;
+    int fps;
+    bool prevBInvincible;
+
+    public StateIdleInvincibleAnimation(PlayerControl pc, SpriteRenderer renderer, Sprite[] animation, int fps, KeyCode key) {
+        this.pc = pc;
+        this.renderer = renderer;
+        this.animation = animation;
+        this.key = key;
+        this.animation_length = animation.Length;
+        this.fps = fps;
+        prevBInvincible = pc.bInvincible;
+
+        if (this.animation_length <= 0)
+            Debug.LogError("Empty animation submitted to state machine!");
+    }
+
+    public override void OnStart() {
+        animation_start_time = Time.time;
+    }
+
+    public override void OnUpdate(float time_delta_fraction) {
+        if (pc.current_state == EntityState.ATTACKING)
+            return;
+
+        if (this.animation_length <= 0) {
+            Debug.LogError("Empty animation submitted to state machine!");
+            return;
+        }
+
+        // Modulus is necessary so we don't overshoot the length of the animation.
+        int current_frame_index = ((int)((Time.time - animation_start_time) / (1.0 / fps)) % animation_length);
+        renderer.sprite = animation[current_frame_index];
+
+
+        // Transition to walking animations on key press.
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+            state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_down_invincible, 6, KeyCode.DownArrow));
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+            state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_up_invincible, 6, KeyCode.UpArrow));
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+            state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_right_invincible, 6, KeyCode.RightArrow));
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+            state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_left_invincible, 6, KeyCode.LeftArrow));
+
+        if (pc.bInvincible != prevBInvincible) {
+            switch (key) {
+                case KeyCode.DownArrow:
+                    state_machine.ChangeState(new StateIdleWithSprite(pc, renderer, pc.link_run_down[0], key));
+                    break;
+                case KeyCode.UpArrow:
+                    state_machine.ChangeState(new StateIdleWithSprite(pc, renderer, pc.link_run_up[0], key));
+                    break;
+                case KeyCode.RightArrow:
+                    state_machine.ChangeState(new StateIdleWithSprite(pc, renderer, pc.link_run_right[0], key));
+                    break;
+                case KeyCode.LeftArrow:
+                    state_machine.ChangeState(new StateIdleWithSprite(pc, renderer, pc.link_run_left[0], key));
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }
 
 public class StateLinkNormalMovement : State
@@ -169,6 +329,7 @@ public class StateLinkNormalMovement : State
 
     public override void OnUpdate(float time_delta_fraction)
     {
+
         Vector3 pos = p.transform.position;
 
         float h_input = Input.GetAxis("Horizontal");
@@ -267,6 +428,33 @@ public class StateLinkAttack : State
         p.current_state = EntityState.NORMAL;
         MonoBehaviour.Destroy(weapon_instance);
     }
+}
+
+public class StateLinkStunned : State {
+    PlayerControl pc;
+    float cooldown;
+
+    public StateLinkStunned(PlayerControl _pc, float _cooldown) {
+        pc = _pc;
+        cooldown = _cooldown;
+    }
+
+    public override void OnStart() {
+        pc.current_state = EntityState.STUNNED;
+        pc.GetComponent<Rigidbody>().velocity = Vector3.zero;
+    }
+
+    public override void OnUpdate(float time_delta_fraction) {
+        cooldown -= time_delta_fraction;
+        if (cooldown <= 0) 
+            ConcludeState();
+        
+    }
+
+    public override void OnFinish() {
+        pc.current_state = EntityState.NORMAL;
+    }
+
 }
 
 // Additional recommended states:

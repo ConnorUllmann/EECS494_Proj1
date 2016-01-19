@@ -123,7 +123,7 @@ public class ShowMapOnCamera : MonoBehaviour {
                     continue;
                 } else {                                // On-Screen Tile
                     tileNum = MAP[i,j];
-                    
+
                     if (tileNum == 0) { // Empty space
                         if (MAP_TILES[i,j] != null) {
                             PushTile( MAP_TILES[i,j] );
