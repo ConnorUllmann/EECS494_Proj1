@@ -8,6 +8,7 @@ TagManager:
   - Door
   - Hero
   - Enemy
+  - Weapon
   layers:
   - Default
   - TransparentFX
