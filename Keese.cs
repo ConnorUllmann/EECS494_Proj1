@@ -17,10 +17,10 @@ public class Keese : Enemy {
 
     public override void Update()
     {
-        base.Update();
         state_machine.Update();
         if (state_machine.IsFinished())
             state_machine.ChangeState(new StateKeeseNormal(this, GetComponent<SpriteRenderer>(), flap));
+        base.Update();
     }
 
 

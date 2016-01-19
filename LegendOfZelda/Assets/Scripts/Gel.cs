@@ -16,8 +16,9 @@ public class Gel : Enemy
         state_machine.ChangeState(new StateGelStopped(this));
     }
 
-    void Update()
+    public override void Update()
     {
+        base.Update();
         state_machine.Update();
         if (state_machine.IsFinished())
             state_machine.ChangeState(new StateGelNormal(this, GetComponent<SpriteRenderer>(), stand));

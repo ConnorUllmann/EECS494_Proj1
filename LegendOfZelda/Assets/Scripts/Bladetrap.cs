@@ -11,8 +11,9 @@ public class Bladetrap : Enemy
         state_machine.ChangeState(new StateBladetrapNormal(this));
     }
 
-    void Update()
+    public override void Update()
     {
+        //base.Update();
         state_machine.Update();
         if (state_machine.IsFinished())
             state_machine.ChangeState(new StateBladetrapNormal(this));
