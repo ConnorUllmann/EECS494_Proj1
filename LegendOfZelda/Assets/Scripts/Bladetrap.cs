@@ -60,7 +60,7 @@ public class StateBladetrapNormal : State
                 dir.y = 0;
             else
                 dir.x = 0;
-            state_machine.ChangeState(new StateBladetrapMoving(p, dir.normalized));
+            state_machine.ChangeState(new StateBladetrapMoving(p, dir.normalized, true));
         }
     }
 }
@@ -69,15 +69,20 @@ public class StateBladetrapMoving : State
 {
     Bladetrap p;
 
-    private float speed = 3f;
+    private float speed;
     private Vector3 dir;
     private Vector3 nextCell;
     private bool leaveState = false;
+    private bool fast = false;
 
-    public StateBladetrapMoving(Bladetrap _p, Vector3 _dir)
+    public StateBladetrapMoving(Bladetrap _p, Vector3 _dir, bool _fast)
     {
         p = _p;
         dir = _dir.normalized;
+
+        fast = _fast;
+        speed = fast ? 5f : 2f;
+
         nextCell = new Vector3((int)p.transform.position.x + dir.x, (int)p.transform.position.y + dir.y);
         if (Utils.CollidingWithAnyWall(nextCell) || Tile.Solid(nextCell))
         {
@@ -90,7 +95,10 @@ public class StateBladetrapMoving : State
     {
         if(leaveState)
         {
-            state_machine.ChangeState(new StateBladetrapNormal(p));
+            if(fast)
+                state_machine.ChangeState(new StateBladetrapMoving(p, -dir, false));
+            else
+                state_machine.ChangeState(new StateBladetrapNormal(p));
             return;
         }
 
@@ -102,15 +110,22 @@ public class StateBladetrapMoving : State
             nextCell = new Vector3(nextCell.x + dir.x, nextCell.y + dir.y);
             if (Utils.CollidingWithAnyWall(nextCell) || Tile.Solid(nextCell))
             {
-                state_machine.ChangeState(new StateBladetrapNormal(p));
+                GoToNextState();
                 return;
             }
         }
 
         if(p.gameObject.GetComponent<Rigidbody>().velocity.magnitude <= 0.01f)
         {
-            state_machine.ChangeState(new StateBladetrapNormal(p));
             return;
         }
+    }
+
+    private void GoToNextState()
+    {
+        if (fast)
+            state_machine.ChangeState(new StateBladetrapMoving(p, -dir, false));
+        else
+            state_machine.ChangeState(new StateBladetrapNormal(p));
     }
 }
