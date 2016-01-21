@@ -424,6 +424,7 @@ public class StateLinkAttack : State
     public override void OnFinish()
     {
         p.current_state = EntityState.NORMAL;
+        if (weapon_instance == null) return;
         if(weapon_instance.tag != "Boomerang")
             MonoBehaviour.Destroy(weapon_instance);
     }

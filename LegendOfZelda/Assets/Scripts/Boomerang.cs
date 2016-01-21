@@ -17,7 +17,6 @@ public class Boomerang : MonoBehaviour {
 	}
 
     void OnCollisionEnter(Collision coll) {
-        print(coll.gameObject.name);
         state_machine.ChangeState(new StateBoomerangReturning(PlayerControl.S, this, speed));
     }
 
@@ -25,6 +24,10 @@ public class Boomerang : MonoBehaviour {
         if(coll.gameObject.tag == "Enemy") {
             state_machine.ChangeState(new StateBoomerangReturning(PlayerControl.S, this, speed));
         }
+        if(coll.gameObject.tag == "Rupee") {
+            state_machine.ChangeState(new StateBoomerangReturning(PlayerControl.S, this, speed, coll.gameObject));
+        }
+
         if(coll.gameObject.tag == "Hero") {
             Destroy(this.gameObject);
         }
@@ -67,11 +70,13 @@ public class StateBoomerangReturning : State {
     PlayerControl p;
     Boomerang b;
     float speed;
+    GameObject pickedUpObject;
 
-    public StateBoomerangReturning(PlayerControl _p, Boomerang _b, float _speed) {
+    public StateBoomerangReturning(PlayerControl _p, Boomerang _b, float _speed, GameObject _pickedUpObject = null) {
         b = _b;
         speed = _speed;
         p = _p;
+        pickedUpObject = _pickedUpObject;
 
         b.GetComponent<BoxCollider>().isTrigger = true;
     }
@@ -79,6 +84,10 @@ public class StateBoomerangReturning : State {
     public override void OnUpdate(float time_delta_fraction) {
         Vector3 orientation = p.transform.position - b.transform.position;
         b.GetComponent<Rigidbody>().velocity = orientation.normalized * speed;
+
+        if(pickedUpObject != null) {
+            pickedUpObject.transform.position = b.transform.position;
+        }
         
     }
 
