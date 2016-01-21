@@ -7,12 +7,6 @@ public class FollowCameraPoints : MonoBehaviour {
     public Vector3 offset = new Vector3(0, 0, -10);
     public float easing = 0.1f;
 
-    private Camera cam;
-
-	// Use this for initialization
-	void Awake () {
-        cam = GetComponent<Camera>();
-	}
 
     // Update is called once per frame
     void Update() {

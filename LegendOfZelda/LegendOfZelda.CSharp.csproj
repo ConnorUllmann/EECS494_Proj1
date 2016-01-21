@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Bladetrap.cs" />
+    <Compile Include="Assets\Scripts\Boomerang.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\CameraPoints.cs" />
     <Compile Include="Assets\Scripts\CreateCameraPoints.cs" />

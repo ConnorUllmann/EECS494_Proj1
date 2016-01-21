@@ -65,14 +65,12 @@ public class StateIdleWithSprite : State {
     PlayerControl pc;
     SpriteRenderer renderer;
     Sprite sprite;
-    bool prevBInvcible;
     KeyCode key;
 
     public StateIdleWithSprite(PlayerControl pc, SpriteRenderer renderer, Sprite sprite, KeyCode key = KeyCode.DownArrow) {
         this.pc = pc;
         this.renderer = renderer;
         this.sprite = sprite;
-        prevBInvcible = pc.bInvincible;
         this.key = key;
     }
 
@@ -426,7 +424,8 @@ public class StateLinkAttack : State
     public override void OnFinish()
     {
         p.current_state = EntityState.NORMAL;
-        MonoBehaviour.Destroy(weapon_instance);
+        if(weapon_instance.tag != "Boomerang")
+            MonoBehaviour.Destroy(weapon_instance);
     }
 }
 

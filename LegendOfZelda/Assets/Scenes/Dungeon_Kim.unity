@@ -466,7 +466,7 @@ MonoBehaviour:
   - {fileID: 21300018, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
   current_state: 0
   current_direction: 2
-  selected_weapon_prefab: {fileID: 198378, guid: 5086923027139b04d9b760050b38ee67,
+  selected_weapon_prefab: {fileID: 120104, guid: 53788e4678d9ef3419c2172ba4d8ad84,
     type: 2}
 --- !u!1001 &1357293377
 Prefab:

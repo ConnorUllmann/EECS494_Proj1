@@ -33,7 +33,7 @@ public class Enemy : MonoBehaviour
     }
 
 
-    void OnTriggerEnter(Collider coll) {
+    public virtual void OnTriggerEnter(Collider coll) {
         if(coll.gameObject.tag == "Weapon") {
             --health;
         }
