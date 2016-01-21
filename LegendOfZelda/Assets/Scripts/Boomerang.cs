@@ -71,6 +71,7 @@ public class StateBoomerangReturning : State {
     Boomerang b;
     float speed;
     GameObject pickedUpObject;
+    //Changed this
 
     public StateBoomerangReturning(PlayerControl _p, Boomerang _b, float _speed, GameObject _pickedUpObject = null) {
         b = _b;
