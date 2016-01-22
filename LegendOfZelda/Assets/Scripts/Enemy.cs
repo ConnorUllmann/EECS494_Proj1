@@ -45,3 +45,30 @@ public class Enemy : MonoBehaviour
         }
     }
 }
+
+public class StateEnemyStunned : State {
+    Enemy pc;
+    float cooldown;
+
+    public StateEnemyStunned(Enemy _pc, float _cooldown) {
+        pc = _pc;
+        cooldown = _cooldown;
+    }
+
+    public override void OnStart() {
+        pc.current_state = EntityState.STUNNED;
+        pc.GetComponent<Rigidbody>().velocity = Vector3.zero;
+    }
+
+    public override void OnUpdate(float time_delta_fraction) {
+        cooldown -= Time.deltaTime;
+        if (cooldown <= 0)
+            ConcludeState();
+
+    }
+
+    public override void OnFinish() {
+        pc.current_state = EntityState.NORMAL;
+    }
+
+}
