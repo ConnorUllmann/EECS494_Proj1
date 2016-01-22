@@ -24,19 +24,9 @@ public class Gel : Enemy
             state_machine.ChangeState(new StateGelNormal(this, GetComponent<SpriteRenderer>(), stand));
     }
 
-    void OnColliderEnter(Collision coll)
+    public override void OnTriggerEnter(Collider coll)
     {
-        switch (coll.gameObject.tag)
-        {
-            case "Player":
-                HitPlayer();
-                break;
-        }
-    }
-
-    void HitPlayer()
-    {
-
+        base.OnTriggerEnter(coll);
     }
 }
 

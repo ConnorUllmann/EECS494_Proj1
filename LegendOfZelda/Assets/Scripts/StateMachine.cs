@@ -411,6 +411,7 @@ public class StateLinkAttack : State
         Quaternion new_weapon_rotation = new Quaternion();
         new_weapon_rotation.eulerAngles = direction_eulerangle;
         weapon_instance.transform.rotation = new_weapon_rotation;
+        weapon_instance.GetComponent<BoxCollider>().transform.rotation = new_weapon_rotation;
     }
 
     public override void OnUpdate(float time_delta_fraction)
@@ -425,7 +426,8 @@ public class StateLinkAttack : State
     {
         p.current_state = EntityState.NORMAL;
         if (weapon_instance == null) return;
-        if(weapon_instance.tag != "Boomerang")
+        if(weapon_instance.tag != "Boomerang" &&
+           weapon_instance.tag != "Arrow")
             MonoBehaviour.Destroy(weapon_instance);
     }
 }

@@ -18,21 +18,6 @@ public class Bladetrap : Enemy
         if (state_machine.IsFinished())
             state_machine.ChangeState(new StateBladetrapNormal(this));
     }
-
-    void OnColliderEnter(Collision coll)
-    {
-        switch (coll.gameObject.tag)
-        {
-            case "Player":
-                HitPlayer();
-                break;
-        }
-    }
-
-    void HitPlayer()
-    {
-
-    }
 }
 
 public class StateBladetrapNormal : State
@@ -84,11 +69,10 @@ public class StateBladetrapMoving : State
         speed = fast ? 5f : 2f;
 
         nextCell = new Vector3((int)p.transform.position.x + dir.x, (int)p.transform.position.y + dir.y);
-        if (Utils.CollidingWithAnyWall(nextCell) || Tile.Solid(nextCell))
+        if (Utils.CollidingWithAnyWall(nextCell) || Tile.Unwalkable(nextCell))
         {
             leaveState = true;
         }
-        Debug.Log("Start moving! " + dir);
     }
 
     public override void OnUpdate(float time_delta_fraction)
@@ -108,7 +92,7 @@ public class StateBladetrapMoving : State
             (Mathf.Abs(nextCell.y - p.transform.position.y) < 0.1f && dir.y != 0.0f))
         {
             nextCell = new Vector3(nextCell.x + dir.x, nextCell.y + dir.y);
-            if (Utils.CollidingWithAnyWall(nextCell) || Tile.Solid(nextCell))
+            if (Utils.CollidingWithAnyWall(nextCell) || Tile.Unwalkable(nextCell))
             {
                 GoToNextState();
                 return;

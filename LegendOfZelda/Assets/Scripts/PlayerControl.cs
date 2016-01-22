@@ -82,15 +82,16 @@ public class PlayerControl : MonoBehaviour {
                 break;
 
             case "Enemy":
-                if(!bInvincible) {
+            case "EnemyProjectile":
+                if (!bInvincible) {
                     --health;
                     bInvincible = true;
 
                     current_state = EntityState.STUNNED;
                     control_state_machine.ChangeState(new StateLinkStunned(this, stunTimer));
                 }
-
                 break;
+
             case "Door":
                 MoveToNextRoom();
                 break;

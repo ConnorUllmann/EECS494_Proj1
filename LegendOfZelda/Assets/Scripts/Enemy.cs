@@ -32,10 +32,16 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public virtual void Hit(Collider coll=null)
+    {
+        health--;
+    }
 
     public virtual void OnTriggerEnter(Collider coll) {
-        if(coll.gameObject.tag == "Weapon") {
-            --health;
+        if(coll.gameObject.tag == "Weapon" ||
+           coll.gameObject.tag == "Boomerang" ||
+           coll.gameObject.tag == "Arrow") {
+            Hit(coll);
         }
     }
 }

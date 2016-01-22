@@ -10,6 +10,8 @@ TagManager:
   - Enemy
   - Weapon
   - Boomerang
+  - EnemyProjectile
+  - Arrow
   layers:
   - Default
   - TransparentFX
