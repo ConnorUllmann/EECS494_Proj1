@@ -354,8 +354,11 @@ public class StateLinkNormalMovement : State
         else if (v_input < 0.0f)
             p.current_direction = Direction.SOUTH;
 
-        if (Input.GetKeyDown(KeyCode.Z))
-            state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab, 15));
+        if (Input.GetKeyDown(KeyCode.A) && p.selected_weapon_prefab_A_button != null)
+            state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_A_button, 15));
+        else if(Input.GetKeyDown(KeyCode.S) && p.selected_weapon_prefab_B_button != null) {
+            state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_B_button, 15));
+        }
 
         p.transform.position = pos;
     }
@@ -377,6 +380,16 @@ public class StateLinkAttack : State
 
     public override void OnStart()
     {
+        if(weapon_prefab.gameObject.tag == "Boomerang") {
+            if(!p.canBoomerang) {
+                return;
+            }
+            else {
+                p.canBoomerang = false;
+            }
+        }
+
+
         p.current_state = EntityState.ATTACKING;
 
         p.GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -411,7 +424,6 @@ public class StateLinkAttack : State
         Quaternion new_weapon_rotation = new Quaternion();
         new_weapon_rotation.eulerAngles = direction_eulerangle;
         weapon_instance.transform.rotation = new_weapon_rotation;
-        weapon_instance.GetComponent<BoxCollider>().transform.rotation = new_weapon_rotation;
     }
 
     public override void OnUpdate(float time_delta_fraction)
@@ -425,9 +437,9 @@ public class StateLinkAttack : State
     public override void OnFinish()
     {
         p.current_state = EntityState.NORMAL;
-        if (weapon_instance == null) return;
-        if(weapon_instance.tag != "Boomerang" &&
-           weapon_instance.tag != "Arrow")
+        if (weapon_instance == null)
+            return;
+        if(weapon_instance.tag != "Boomerang")
             MonoBehaviour.Destroy(weapon_instance);
     }
 }
@@ -447,7 +459,7 @@ public class StateLinkStunned : State {
     }
 
     public override void OnUpdate(float time_delta_fraction) {
-        cooldown -= time_delta_fraction;
+        cooldown -= Time.deltaTime;
         if (cooldown <= 0) 
             ConcludeState();
         

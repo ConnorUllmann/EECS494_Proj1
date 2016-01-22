@@ -24,9 +24,11 @@ public class Keese : Enemy {
         base.Update();
     }
 
-    public override void OnTriggerEnter(Collider coll)
-    {
+    public override void OnTriggerEnter(Collider coll) {
         base.OnTriggerEnter(coll);
+        if(coll.gameObject.tag == "Boomerang") {
+            --health;
+        }
     }
 }
 

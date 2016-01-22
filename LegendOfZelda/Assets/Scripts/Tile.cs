@@ -39,9 +39,8 @@ public class Tile : MonoBehaviour {
             return null;
         return tiles[x_][y_];
     }
-
     //Returns whether the tile at the given position is walkable.
-    public static bool Unwalkable(Vector3 pos)
+    public static bool Solid(Vector3 pos)
     {
         var tile = GetTile(pos);
         var collider = tile.GetComponent<BoxCollider>();
