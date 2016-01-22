@@ -22,9 +22,9 @@ public class PlayerControl : MonoBehaviour {
     public float doorMoveOffset = 0.7f;
 
     public Sprite[] link_run_down;
-	public Sprite[] link_run_up;
-	public Sprite[] link_run_right;
-	public Sprite[] link_run_left;
+    public Sprite[] link_run_up;
+    public Sprite[] link_run_right;
+    public Sprite[] link_run_left;
 
     public Sprite[] link_run_down_invincible;
     public Sprite[] link_run_up_invincible;
@@ -37,18 +37,18 @@ public class PlayerControl : MonoBehaviour {
     public Sprite[] left_invincible;
 
     StateMachine animation_state_machine;
-	StateMachine control_state_machine;
-	
-	public EntityState current_state = EntityState.NORMAL;
-	public Direction current_direction = Direction.SOUTH;
+    StateMachine control_state_machine;
 
-	public GameObject selected_weapon_prefab_A_button;
+    public EntityState current_state = EntityState.NORMAL;
+    public Direction current_direction = Direction.SOUTH;
+
+    public GameObject selected_weapon_prefab_A_button;
     public GameObject selected_weapon_prefab_B_button;
     public bool canBoomerang = true;
+    public bool canUseDoor = true;
 
-
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start() {
         if (S != null)
             Debug.LogError("Multiple players!");
         S = this;
@@ -59,33 +59,31 @@ public class PlayerControl : MonoBehaviour {
         control_state_machine = new StateMachine();
         control_state_machine.ChangeState(new StateLinkNormalMovement(this));
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update() {
         animation_state_machine.Update();
         control_state_machine.Update();
         if (control_state_machine.IsFinished())
             control_state_machine.ChangeState(new StateLinkNormalMovement(this));
-        if(bInvincible) {
+        if (bInvincible) {
             invincibiltyTimer -= Time.deltaTime;
-            if(invincibiltyTimer <= 0) {
+            if (invincibiltyTimer <= 0) {
                 bInvincible = false;
                 invincibiltyTimer = maxInvincibilityTimer;
             }
         }
     }
 
-    void OnTriggerEnter(Collider coll)
-    {
-        switch (coll.gameObject.tag)
-        {
+    void OnTriggerEnter(Collider coll) {
+        switch (coll.gameObject.tag) {
             case "Rupee":
                 Destroy(coll.gameObject);
                 rupee_count++;
                 break;
 
             case "Enemy":
-                if(!bInvincible) {
+                if (!bInvincible) {
                     --health;
                     bInvincible = true;
 
@@ -95,34 +93,48 @@ public class PlayerControl : MonoBehaviour {
 
                 break;
             case "Door":
-                MoveToNextRoom();
+                if (canUseDoor) {
+                    canUseDoor = false;
+                    MoveToNextRoom(coll);
+                    canUseDoor = true;
+                }
                 break;
         }
     }
 
-    void MoveToNextRoom() {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 4.0f);
-        GameObject nextDoor = new GameObject();
-        GameObject thisDoor = new GameObject();
+    void MoveToNextRoom(Collider thisDoor) {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 6.0f);
+        GameObject nextDoor = null;
+        GameObject nextDoor2 = null;
 
-        List<GameObject> enemyList = new List<GameObject>();
         foreach (Collider c in hitColliders) {
-            if (c.gameObject.tag == "Door" && Vector3.Distance(transform.position, c.transform.position) > 2.0f && Vector3.Distance(transform.position, c.transform.position) < 5.0f) {
-                nextDoor = c.gameObject;
-            }
-            else if(c.gameObject.tag == "Door" && Vector3.Distance(transform.position, c.transform.position) < 2.0f) {
-                thisDoor = c.gameObject;
+            if (c.gameObject.tag == "Door" && Vector3.Distance(thisDoor.gameObject.transform.position, c.transform.position) > 2.0f && Vector3.Distance(thisDoor.gameObject.transform.position, c.transform.position) < 5.0f) {
+                if (nextDoor == null) {
+                    nextDoor = c.gameObject;
+                } 
             }
         }
 
+        if (nextDoor == null) {
+            Debug.Log("No door to go to");
+            return;
+        }
 
-        Vector3 directionOffset = nextDoor.transform.position - thisDoor.transform.position;
+        Vector3 destinationLocation = nextDoor.transform.position;
 
-        Vector3 newPos = nextDoor.transform.position + ((directionOffset.normalized) * doorMoveOffset);
+        Vector3 sourceLocation = thisDoor.transform.position;
+
+        Vector3 directionOffset = destinationLocation - sourceLocation;
+
+
+        Vector3 newPos = destinationLocation + ((directionOffset.normalized) * doorMoveOffset);
         transform.position = newPos;
 
         pauseCurrentRoom(2.0f);
+
     }
+
+
 
     public void pauseCurrentRoom(float pauseDuration) {
         control_state_machine.ChangeState(new StateLinkStunned(this, pauseDuration));
