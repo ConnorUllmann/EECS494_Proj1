@@ -327,7 +327,6 @@ public class StateLinkNormalMovement : State
 
     public override void OnUpdate(float time_delta_fraction)
     {
-
         Vector3 pos = p.transform.position;
 
         float h_input = Input.GetAxis("Horizontal");
@@ -380,15 +379,18 @@ public class StateLinkAttack : State
 
     public override void OnStart()
     {
-        if(weapon_prefab.gameObject.tag == "Boomerang") {
-            if(!p.canBoomerang) {
+        if(weapon_prefab.gameObject.tag == "Boomerang")
+        {
+            if(!p.canBoomerang)
                 return;
-            }
-            else {
+            else
                 p.canBoomerang = false;
-            }
         }
-
+        else if (weapon_prefab.gameObject.tag == "Arrow")
+        {
+            if (!p.hasBow)
+                return;
+        }
 
         p.current_state = EntityState.ATTACKING;
 
@@ -459,7 +461,8 @@ public class StateLinkStunned : State {
         pc.GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
-    public override void OnUpdate(float time_delta_fraction) {
+    public override void OnUpdate(float time_delta_fraction)
+    {
         cooldown -= Time.deltaTime;
         if (cooldown <= 0) 
             ConcludeState();
