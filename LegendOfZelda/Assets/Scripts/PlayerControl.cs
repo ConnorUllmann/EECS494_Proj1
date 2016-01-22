@@ -83,6 +83,7 @@ public class PlayerControl : MonoBehaviour {
                 break;
 
             case "Enemy":
+            case "EnemyProjectile":
                 if (!bInvincible) {
                     --health;
                     bInvincible = true;
@@ -105,7 +106,6 @@ public class PlayerControl : MonoBehaviour {
     void MoveToNextRoom(Collider thisDoor) {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, 6.0f);
         GameObject nextDoor = null;
-        GameObject nextDoor2 = null;
 
         foreach (Collider c in hitColliders) {
             if (c.gameObject.tag == "Door" && Vector3.Distance(thisDoor.gameObject.transform.position, c.transform.position) > 2.0f && Vector3.Distance(thisDoor.gameObject.transform.position, c.transform.position) < 5.0f) {

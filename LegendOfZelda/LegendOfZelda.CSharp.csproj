@@ -68,6 +68,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Aquamentus.cs" />
+    <Compile Include="Assets\Scripts\AquamentusShot.cs" />
+    <Compile Include="Assets\Scripts\Arrow.cs" />
     <Compile Include="Assets\Scripts\Bladetrap.cs" />
     <Compile Include="Assets\Scripts\Boomerang.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
@@ -75,10 +78,12 @@
     <Compile Include="Assets\Scripts\CreateCameraPoints.cs" />
     <Compile Include="Assets\Scripts\DisappearOnStart.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
+    <Compile Include="Assets\Scripts\Fire.cs" />
     <Compile Include="Assets\Scripts\FollowCameraPoints.cs" />
     <Compile Include="Assets\Scripts\Gel.cs" />
     <Compile Include="Assets\Scripts\HUD.cs" />
     <Compile Include="Assets\Scripts\Keese.cs" />
+    <Compile Include="Assets\Scripts\OldMan.cs" />
     <Compile Include="Assets\Scripts\ParseZeldaMap.cs" />
     <Compile Include="Assets\Scripts\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\PlayerControl.cs" />
