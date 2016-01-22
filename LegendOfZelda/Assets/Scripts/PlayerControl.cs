@@ -45,6 +45,7 @@ public class PlayerControl : MonoBehaviour {
     public GameObject selected_weapon_prefab_A_button;
     public GameObject selected_weapon_prefab_B_button;
     public bool canBoomerang = true;
+    public bool hasBow = true;
     public bool canUseDoor = true;
 
     // Use this for initialization
@@ -84,7 +85,8 @@ public class PlayerControl : MonoBehaviour {
 
             case "Enemy":
             case "EnemyProjectile":
-                if (!bInvincible) {
+                if (!bInvincible)
+                {
                     --health;
                     bInvincible = true;
 

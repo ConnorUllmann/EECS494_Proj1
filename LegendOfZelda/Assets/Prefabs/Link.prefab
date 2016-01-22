@@ -74,7 +74,7 @@ MonoBehaviour:
   health: 3
   bInvincible: 0
   maxInvincibilityTimer: 3
-  stunTimer: 15
+  stunTimer: 0.5
   doorMoveOffset: 0.6
   link_run_down:
   - {fileID: 21300000, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
@@ -114,8 +114,13 @@ MonoBehaviour:
   - {fileID: 21300018, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
   current_state: 0
   current_direction: 2
-  selected_weapon_prefab: {fileID: 198378, guid: 5086923027139b04d9b760050b38ee67,
+  selected_weapon_prefab_A_button: {fileID: 198378, guid: 5086923027139b04d9b760050b38ee67,
     type: 2}
+  selected_weapon_prefab_B_button: {fileID: 155152, guid: 2bc7c6b015b6d3246b0a0fdcad96673a,
+    type: 2}
+  canBoomerang: 1
+  hasBow: 1
+  canUseDoor: 1
 --- !u!212 &21217734
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -161,6 +166,18 @@ Prefab:
       propertyPath: m_Size.y
       value: 0.4
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: stunTimer
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: selected_weapon_prefab_A_button
+      value: 
+      objectReference: {fileID: 198378, guid: 5086923027139b04d9b760050b38ee67, type: 2}
+    - target: {fileID: 0}
+      propertyPath: selected_weapon_prefab_B_button
+      value: 
+      objectReference: {fileID: 155152, guid: 2bc7c6b015b6d3246b0a0fdcad96673a, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 116762}
