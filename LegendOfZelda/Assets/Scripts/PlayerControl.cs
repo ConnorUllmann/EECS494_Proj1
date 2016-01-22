@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public enum Direction {NORTH, EAST, SOUTH, WEST};
 public enum EntityState {NORMAL, ATTACKING, STUNNED};
@@ -15,9 +16,9 @@ public class PlayerControl : MonoBehaviour {
     public float maxInvincibilityTimer = 3.0f;
     private float invincibiltyTimer = 0.0f;
 
-    public float stunTimer = 15.0f;
+    public float stunTimer = .5f;
 
-    private float distanceToNextDoor = 3.5f;
+    private float roomSize = 16f;
     public float doorMoveOffset = 0.7f;
 
     public Sprite[] link_run_down;
@@ -41,7 +42,9 @@ public class PlayerControl : MonoBehaviour {
 	public EntityState current_state = EntityState.NORMAL;
 	public Direction current_direction = Direction.SOUTH;
 
-	public GameObject selected_weapon_prefab;
+	public GameObject selected_weapon_prefab_A_button;
+    public GameObject selected_weapon_prefab_B_button;
+    public bool canBoomerang = true;
 
 
 	// Use this for initialization
@@ -98,17 +101,36 @@ public class PlayerControl : MonoBehaviour {
     }
 
     void MoveToNextRoom() {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, distanceToNextDoor);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 4.0f);
         GameObject nextDoor = new GameObject();
+        GameObject thisDoor = new GameObject();
+
+        List<GameObject> enemyList = new List<GameObject>();
         foreach (Collider c in hitColliders) {
-            if (c.gameObject.tag == "Door" && Vector3.Distance(transform.position, c.transform.position) > 2.0f) {
+            if (c.gameObject.tag == "Door" && Vector3.Distance(transform.position, c.transform.position) > 2.0f && Vector3.Distance(transform.position, c.transform.position) < 5.0f) {
                 nextDoor = c.gameObject;
+            }
+            else if(c.gameObject.tag == "Door" && Vector3.Distance(transform.position, c.transform.position) < 2.0f) {
+                thisDoor = c.gameObject;
             }
         }
 
-        Vector3 directionOffset = nextDoor.transform.position - transform.position;
 
-        Vector3 newPos = nextDoor.transform.position + ((directionOffset / directionOffset.magnitude) * doorMoveOffset);
+        Vector3 directionOffset = nextDoor.transform.position - thisDoor.transform.position;
+
+        Vector3 newPos = nextDoor.transform.position + ((directionOffset.normalized) * doorMoveOffset);
         transform.position = newPos;
+
+        pauseCurrentRoom(2.0f);
+    }
+
+    public void pauseCurrentRoom(float pauseDuration) {
+        control_state_machine.ChangeState(new StateLinkStunned(this, pauseDuration));
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, roomSize);
+        foreach(Collider c in hitColliders) {
+            if (c.gameObject.tag == "Enemy") {
+                c.gameObject.GetComponent<Enemy>().state_machine.ChangeState(new StateEnemyStunned(c.gameObject.GetComponent<Enemy>(), pauseDuration));
+            }
+        }
     }
 }

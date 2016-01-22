@@ -29,6 +29,7 @@ public class Boomerang : MonoBehaviour {
         }
 
         if(coll.gameObject.tag == "Hero") {
+            coll.gameObject.GetComponent<PlayerControl>().canBoomerang = true;
             Destroy(this.gameObject);
         }
     }
@@ -60,8 +61,9 @@ public class StateBoomerangForward : State {
     }
 
     public override void OnUpdate(float time_delta_fraction) {
-
-
+        Quaternion deltaRotation = Quaternion.Euler(new Vector3(0, 0, 720) * Time.deltaTime);
+        Rigidbody rb = b.gameObject.GetComponent<Rigidbody>();
+        rb.MoveRotation(rb.rotation * deltaRotation);
     }
 }
 
@@ -83,8 +85,12 @@ public class StateBoomerangReturning : State {
     }
 
     public override void OnUpdate(float time_delta_fraction) {
+        Quaternion deltaRotation = Quaternion.Euler(new Vector3(0, 0, 720) * Time.deltaTime);
+        Rigidbody rb = b.gameObject.GetComponent<Rigidbody>();
+        rb.MoveRotation(rb.rotation * deltaRotation);
+
         Vector3 orientation = p.transform.position - b.transform.position;
-        b.GetComponent<Rigidbody>().velocity = orientation.normalized * speed;
+        rb.velocity = orientation.normalized * speed;
 
         if(pickedUpObject != null) {
             pickedUpObject.transform.position = b.transform.position;
