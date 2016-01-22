@@ -13,7 +13,6 @@ public class PauseMenu : MonoBehaviour {
 
     private RectTransform rt;
     private bool isPaused = false;
-    private int currentWeapon = 0;
     private int currentMenuPointer = 0;
     private int usedAWeapon = 0;
     private int usedBWeapon = -1;
