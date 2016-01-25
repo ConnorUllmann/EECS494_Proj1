@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     public StateMachine state_machine;
     public float speed_max;
     public float health = 1.0f;
+    public bool damagedByBoomerang = false;
 
     // Use this for initialization
     void Start()
@@ -39,9 +40,12 @@ public class Enemy : MonoBehaviour
 
     public virtual void OnTriggerEnter(Collider coll) {
         if(coll.gameObject.tag == "Weapon" ||
-           coll.gameObject.tag == "Boomerang" ||
+           (coll.gameObject.tag == "Boomerang" && damagedByBoomerang) ||
            coll.gameObject.tag == "Arrow") {
             Hit(coll);
+        }
+        if(coll.gameObject.tag == "Boomerang" && !damagedByBoomerang) {
+            state_machine.ChangeState(new StateEnemyStunned(this, 1.0f));
         }
     }
 }

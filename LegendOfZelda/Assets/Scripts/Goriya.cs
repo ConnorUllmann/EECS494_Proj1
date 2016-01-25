@@ -59,7 +59,7 @@ public class StateGoriyaWalk : State {
 
         do {
             direction = Utils.RandomDirection4();
-            nextCell = new Vector3((int)g.transform.position.x + (direction.x * g.speed_max), (int)g.transform.position.y + (direction.y * g.speed_max), 0);
+            nextCell = new Vector3((int)g.transform.position.x + (direction.x), (int)g.transform.position.y + (direction.y), 0);
         } while (Tile.Unwalkable(nextCell) || Utils.CollidingWithAnyWall(nextCell));
 
         if(direction.x == 1) {
@@ -88,7 +88,7 @@ public class StateGoriyaWalk : State {
         while (current_frame_index > animation.Length)
             current_frame_index -= animation.Length;
         renderer.sprite = animation[(int)current_frame_index];
-        nextCell = new Vector3((int)g.transform.position.x + (direction.x * g.speed_max), (int)g.transform.position.y + (direction.y * g.speed_max), 0);
+        nextCell = new Vector3((int)g.transform.position.x + (direction.x), (int)g.transform.position.y + (direction.y), 0);
         if (Tile.Unwalkable(nextCell) || Utils.CollidingWithAnyWall(nextCell)) {
             state_machine.ChangeState(new StateGoriyaWalk(g, g.GetComponent<SpriteRenderer>()));
         }

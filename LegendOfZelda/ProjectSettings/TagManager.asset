@@ -12,6 +12,7 @@ TagManager:
   - Boomerang
   - EnemyProjectile
   - Arrow
+  - Wallmaster
   layers:
   - Default
   - TransparentFX

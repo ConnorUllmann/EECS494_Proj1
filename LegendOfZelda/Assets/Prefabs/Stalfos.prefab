@@ -14,7 +14,7 @@ GameObject:
   - 114: {fileID: 11406776}
   m_Layer: 0
   m_Name: Stalfos
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73,6 +73,7 @@ MonoBehaviour:
   current_state: 0
   speed_max: 1
   health: 1
+  damagedByBoomerang: 0
   walk:
   - {fileID: 21300000, guid: 8ea79a405e968ff4c9c27962347f7ede, type: 3}
   - {fileID: 21300002, guid: 8ea79a405e968ff4c9c27962347f7ede, type: 3}

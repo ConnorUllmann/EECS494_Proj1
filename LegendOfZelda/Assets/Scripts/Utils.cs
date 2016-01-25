@@ -84,6 +84,12 @@ public class Utils : MonoBehaviour {
         return new Vector3();
     }
 
+    public static bool AreInSameRoom(GameObject A, GameObject B) {
+
+        return (Mathf.FloorToInt(A.transform.position.x / roomSize.x) == Mathf.FloorToInt(B.transform.position.x / roomSize.x)) &&
+                (Mathf.FloorToInt(A.transform.position.y / roomSize.y) == Mathf.FloorToInt(B.transform.position.y / roomSize.y));
+    }
+
     // Use this for initialization
     void Start () {
 	

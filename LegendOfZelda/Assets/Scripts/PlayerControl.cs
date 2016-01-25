@@ -48,11 +48,13 @@ public class PlayerControl : MonoBehaviour {
     public bool hasBow = true;
     public bool canUseDoor = true;
 
+    public Vector3 start_point;
     // Use this for initialization
     void Start() {
         if (S != null)
             Debug.LogError("Multiple players!");
         S = this;
+        start_point = transform.position;
 
         animation_state_machine = new StateMachine();
         animation_state_machine.ChangeState(new StateIdleWithSprite(this, GetComponent<SpriteRenderer>(), link_run_down[0]));
@@ -101,6 +103,9 @@ public class PlayerControl : MonoBehaviour {
                     MoveToNextRoom(coll);
                     canUseDoor = true;
                 }
+                break;
+            case "Wallmaster":
+                transform.position = start_point;
                 break;
         }
     }
