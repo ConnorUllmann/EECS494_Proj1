@@ -6,6 +6,7 @@ public class Tile : MonoBehaviour {
 
     public static List<List<Tile>> tiles = new List<List<Tile>>();
 
+    public static List<string> opened = new List<string>();
 
     static Sprite[]         spriteArray;
 
@@ -14,6 +15,9 @@ public class Tile : MonoBehaviour {
 	public int				tileNum;
 	private BoxCollider		bc;
     private Material        mat;
+
+    private char type; //The character that represents this tile in the collision map.
+    public bool open = true; //Whether this tile is unlocked (if it is a door).
 
     private SpriteRenderer  sprend;
 
@@ -28,6 +32,55 @@ public class Tile : MonoBehaviour {
         //Renderer rend = gameObject.GetComponent<Renderer>();
         //mat = rend.material;
 	}
+
+    void Update()
+    {
+        if (tag == "Door" && type == 'L')
+        {
+            //If we aren't open, but the static list of opened doors says this spot is open, then open up.
+            if(!open && opened.Contains(gameObject.name))
+                Open();
+
+            if (PlayerControl.S.keys > 0)
+            {
+                bc.center = Vector3.zero;
+                bc.size = new Vector3(0.25f, 0.25f, 0.25f);
+                bc.isTrigger = true;
+            }
+            else
+            {
+                bc.size = new Vector3(1, 1, 1);
+                bc.isTrigger = false;
+            }
+            if (open)
+                bc.isTrigger = true;
+        }
+    }
+
+    public void Open()
+    {
+        if (!open)
+        {
+            open = true;
+            if (tileNum == 80 || tileNum == 81)
+                tileNum += 12;
+            else if (tileNum == 101)
+                tileNum = 48;
+            else if (tileNum == 106)
+                tileNum = 51;
+            sprend.sprite = spriteArray[tileNum];
+            if(!opened.Contains(gameObject.name))
+                opened.Add(gameObject.name);
+            /*for(int i = 0; i < opened.Count; i++)
+            {
+                Debug.Log(opened[i]);
+            }*/
+            //Open up tiles to the left/right of us, to open up the other half of doors
+            //Won't matter if it gets called on a non-locked door because open is already true by default.
+            GetTile(transform.position + new Vector3(-1, 0, 0)).Open();
+            GetTile(transform.position + new Vector3(1, 0, 0)).Open();
+        }
+    }
 
     //Returns the tile at the given position.
     public static Tile GetTile(Vector3 pos)
@@ -100,6 +153,7 @@ public class Tile : MonoBehaviour {
         // Collider info from collisionData
         bc.enabled = true;
         char c = ShowMapOnCamera.S.collisionS[tileNum];
+        type = c;
         switch (c) {
             case 'S': // Solid
                 bc.center = Vector3.zero;
@@ -110,6 +164,15 @@ public class Tile : MonoBehaviour {
                 bc.center = Vector3.zero;
                 bc.size = new Vector3(.25f, .25f, .25f);
                 bc.isTrigger = true;
+                break;
+            case 'L': //Locked Door
+                tag = "Door";
+                open = false;
+                break;
+            case 'W': //Water
+                gameObject.layer = 4;
+                bc.center = Vector3.zero;
+                bc.size = Vector3.one;
                 break;
             default:
                 bc.enabled = false;

@@ -12,7 +12,7 @@ GameObject:
   - 54: {fileID: 5484072}
   - 65: {fileID: 6502950}
   - 114: {fileID: 11459626}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Boomerang
   m_TagString: Boomerang
   m_Icon: {fileID: 0}
@@ -138,6 +138,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: speed
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

@@ -12,7 +12,7 @@ GameObject:
   - 54: {fileID: 5484072}
   - 65: {fileID: 6502950}
   - 114: {fileID: 11408078}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GoriyaBoomerang
   m_TagString: EnemyProjectile
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 56
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!65 &6502950
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -139,6 +139,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: speed
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_CollisionDetection
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

@@ -11,6 +11,7 @@ public class PlayerControl : MonoBehaviour {
 
     public float walking_velocity = 1.0f;
     public int rupee_count = 0;
+    public int keys = 0; //Number of keys the player has.
     public float health = 3.0f;
     public bool bInvincible = false;
     public float maxInvincibilityTimer = 3.0f;
@@ -20,6 +21,8 @@ public class PlayerControl : MonoBehaviour {
 
     private float roomSize = 16f;
     public float doorMoveOffset = 0.7f;
+
+    public GameObject shield;
 
     public Sprite[] link_run_down;
     public Sprite[] link_run_up;
@@ -76,6 +79,48 @@ public class PlayerControl : MonoBehaviour {
                 invincibiltyTimer = maxInvincibilityTimer;
             }
         }
+
+
+        switch(current_direction)
+        {
+            case Direction.NORTH:
+                shield.transform.position = Vector3.zero + transform.position;
+                shield.GetComponent<BoxCollider>().size = new Vector3(1, 0.2f, 0.2f);
+                break;
+            case Direction.EAST:
+                shield.transform.position = new Vector3(0.5f, 0, 0) + transform.position;
+                shield.GetComponent<BoxCollider>().size = new Vector3(0.2f, 1, 0.2f);
+                break;
+            case Direction.SOUTH:
+                shield.transform.position = new Vector3(0, -0.5f, 0) + transform.position;
+                shield.GetComponent<BoxCollider>().size = new Vector3(1, 0.2f, 0.2f);
+                break;
+            case Direction.WEST:
+                shield.transform.position = new Vector3(-0.5f, 0, 0) + transform.position;
+                shield.GetComponent<BoxCollider>().size = new Vector3(0.2f, 1, 0.2f);
+                break;
+        }
+    }
+
+    public Vector3 ShieldVector()
+    {
+        return Utils.DirectionToVector(current_direction);
+    }
+
+    public Vector3 Bounce(Vector3 v)
+    {
+        switch(current_direction)
+        {
+            case Direction.NORTH:
+                return new Vector3(v.x, Mathf.Abs(v.y), v.z);
+            case Direction.EAST:
+                return new Vector3(Mathf.Abs(v.x), v.y, v.z);
+            case Direction.SOUTH:
+                return new Vector3(v.x, -Mathf.Abs(v.y), v.z);
+            case Direction.WEST:
+                return new Vector3(-Mathf.Abs(v.x), v.y, v.z);
+        }
+        return Vector3.zero;
     }
 
     void OnTriggerEnter(Collider coll) {
@@ -99,9 +144,23 @@ public class PlayerControl : MonoBehaviour {
                 break;
             case "Door":
                 if (canUseDoor) {
-                    canUseDoor = false;
-                    MoveToNextRoom(coll);
-                    canUseDoor = true;
+
+                    if (!coll.gameObject.GetComponent<Tile>().open)
+                    {
+                        if (keys > 0)
+                        {
+                            keys--;
+                            Debug.Log("Keys: " + keys);
+                            coll.gameObject.GetComponent<Tile>().Open();
+                        }
+                    }
+
+                    if (coll.gameObject.GetComponent<Tile>().open)
+                    {
+                        canUseDoor = false;
+                        MoveToNextRoom(coll);
+                        canUseDoor = true;
+                    }
                 }
                 break;
             case "Wallmaster":
