@@ -96,7 +96,9 @@ public class Tile : MonoBehaviour {
     public static bool Unwalkable(Vector3 pos)
     {
         var tile = GetTile(pos);
-        var collider = tile.GetComponent<BoxCollider>();
+        BoxCollider collider = null;
+        if (tile != null)
+            collider = tile.GetComponent<BoxCollider>();
         return tile != null && collider != null && collider.enabled;
     }
 
