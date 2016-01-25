@@ -84,6 +84,22 @@ public class Utils : MonoBehaviour {
         return new Vector3();
     }
 
+    public static Vector3 DirectionToVector(Direction d)
+    {
+        switch (d)
+        {
+            case Direction.NORTH:
+                return new Vector3(0, 1, 0);
+            case Direction.EAST:
+                return new Vector3(1, 0, 0);
+            case Direction.WEST:
+                return new Vector3(-1, 0, 0);
+            case Direction.SOUTH:
+                return new Vector3(0, -1, 0);
+        }
+        return Vector3.zero;
+    }
+
     // Use this for initialization
     void Start () {
 	

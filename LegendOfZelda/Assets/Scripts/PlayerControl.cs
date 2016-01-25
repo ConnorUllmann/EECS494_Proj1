@@ -11,6 +11,7 @@ public class PlayerControl : MonoBehaviour {
 
     public float walking_velocity = 1.0f;
     public int rupee_count = 0;
+    public int keys = 0; //Number of keys the player has.
     public float health = 3.0f;
     public bool bInvincible = false;
     public float maxInvincibilityTimer = 3.0f;
@@ -97,9 +98,23 @@ public class PlayerControl : MonoBehaviour {
                 break;
             case "Door":
                 if (canUseDoor) {
-                    canUseDoor = false;
-                    MoveToNextRoom(coll);
-                    canUseDoor = true;
+
+                    if (!coll.gameObject.GetComponent<Tile>().open)
+                    {
+                        if (keys > 0)
+                        {
+                            keys--;
+                            Debug.Log("Keys: " + keys);
+                            coll.gameObject.GetComponent<Tile>().Open();
+                        }
+                    }
+
+                    if (coll.gameObject.GetComponent<Tile>().open)
+                    {
+                        canUseDoor = false;
+                        MoveToNextRoom(coll);
+                        canUseDoor = true;
+                    }
                 }
                 break;
         }
