@@ -12,6 +12,7 @@ TagManager:
   - Boomerang
   - EnemyProjectile
   - Arrow
+  - Shield
   layers:
   - Default
   - TransparentFX
@@ -21,8 +22,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Projectile
+  - Shield
   - 
   - 
   - 

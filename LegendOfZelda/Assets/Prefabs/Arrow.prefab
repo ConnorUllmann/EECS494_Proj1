@@ -12,7 +12,7 @@ GameObject:
   - 54: {fileID: 5492318}
   - 65: {fileID: 6597134}
   - 114: {fileID: 11470208}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Arrow
   m_TagString: Arrow
   m_Icon: {fileID: 0}
@@ -171,6 +171,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Center.x
       value: 0.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_CollisionDetection
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

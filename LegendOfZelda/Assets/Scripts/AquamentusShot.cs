@@ -26,4 +26,15 @@ public class AquamentusShot : MonoBehaviour {
         }
             //sprite = animation[(int)((Time.time * 40) % 4 <= 2 ? 1 : 0)];
     }
+
+    void OnTriggerEnter(Collider c)
+    {
+        if (c.gameObject.tag == "Shield")
+        {
+            var rb = GetComponent<Rigidbody>();
+            var rbv = rb.velocity;
+            rbv = PlayerControl.S.Bounce(rbv);
+            rb.velocity = rbv;
+        }
+    }
 }

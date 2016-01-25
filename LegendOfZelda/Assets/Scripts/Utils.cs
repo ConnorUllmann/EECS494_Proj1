@@ -100,8 +100,33 @@ public class Utils : MonoBehaviour {
         return Vector3.zero;
     }
 
-    // Use this for initialization
-    void Start () {
+    public static Vector3 Reflect(Vector3 point, Vector3 normal, Vector3 normal_vec)
+    {
+        normal_vec = 2 * Utils.Dot(point - normal, normal_vec) * normal_vec.normalized;
+        point = -point;
+        normal *= 2;
+        return point + normal + normal_vec;
+    }
+
+    /*public function Reflect(point_x:Number, point_y:Number,
+                                normal_x:Number, normal_y:Number,
+                                normal_vec_x:Number, normal_vec_y:Number):Point
+		{	
+			var x:Point = new Point(point_x, point_y);
+    var x0:Point = new Point(normal_x, normal_y);
+    var n:Point = new Point(normal_vec_x, normal_vec_y);
+    n.normalize(1);
+			//var x1:Point = new Point();
+			n.normalize(2 * Dot(x.subtract(x0), n));
+			x.x = -x.x;
+			x.y = -x.y;
+			x0.normalize(2 * x0.length);
+			return x.add(x0).add(n);
+
+}*/
+
+// Use this for initialization
+void Start () {
 	
 	}
 	

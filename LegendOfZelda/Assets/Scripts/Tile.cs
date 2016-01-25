@@ -169,6 +169,11 @@ public class Tile : MonoBehaviour {
                 tag = "Door";
                 open = false;
                 break;
+            case 'W': //Water
+                gameObject.layer = 4;
+                bc.center = Vector3.zero;
+                bc.size = Vector3.one;
+                break;
             default:
                 bc.enabled = false;
                 break;
