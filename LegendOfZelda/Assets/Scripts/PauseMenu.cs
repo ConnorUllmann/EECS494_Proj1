@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class PauseMenu : MonoBehaviour {
+    public static PauseMenu S; //Establish a singleton
+
     public GameObject pauseMenuPanel;
     public GameObject[] weaponPrefabs;
     public string[] weaponNames;
@@ -11,6 +13,9 @@ public class PauseMenu : MonoBehaviour {
     public Text healthText;
     public Text rupeeText;
 
+    public bool hasBow;
+    public bool hasBoomerang;
+
     private RectTransform rt;
     private bool isPaused = false;
     private int currentMenuPointer = 0;
@@ -18,7 +23,14 @@ public class PauseMenu : MonoBehaviour {
     private int usedBWeapon = -1;
 	// Use this for initialization
 	void Awake () {
+        if(S != null) {
+            Debug.Log("Multiple instances of PauseMenu detected.");
+        }
+        S = this;
+
         rt = pauseMenuPanel.GetComponent<RectTransform>();
+        hasBow = false;
+        hasBoomerang = false;
 
         if(weaponPrefabs.Length != weaponTexts.Length || weaponTexts.Length!= weaponNames.Length) {
             Debug.LogError("Different number of weapon prefabs, names, and text objects assigned to PauseMenu in editor");
@@ -69,9 +81,23 @@ public class PauseMenu : MonoBehaviour {
                 }
             }
 
+            if(currentMenuPointer == 1 && !hasBoomerang) {
+                if (Input.GetKeyDown(KeyCode.DownArrow))
+                    ++currentMenuPointer;
+                else
+                    --currentMenuPointer;
+            }
+            if(currentMenuPointer == 2 && !hasBow) {
+                currentMenuPointer = 0;
+            }
+
             for (int i=0; i<weaponTexts.Length; ++i) {
                 string toDisplay = weaponNames[i];
-                if(i == usedAWeapon) {
+                if ((i == 1 && !hasBoomerang) || (i == 2 && !hasBow)) {
+                    toDisplay = " ";
+                }
+
+                if (i == usedAWeapon) {
                     toDisplay = "<color=#00ffffff>" + toDisplay + "</color>";
                 }
                 if(i == usedBWeapon) {

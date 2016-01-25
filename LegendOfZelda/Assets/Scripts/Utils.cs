@@ -90,8 +90,28 @@ public class Utils : MonoBehaviour {
                 (Mathf.FloorToInt(A.transform.position.y / roomSize.y) == Mathf.FloorToInt(B.transform.position.y / roomSize.y));
     }
 
-    // Use this for initialization
-    void Start () {
+    public static Vector3 DirectionToVector(Direction d) {
+        switch (d) {
+            case Direction.NORTH:
+                return new Vector3(0, 1, 0);
+            case Direction.EAST:
+                return new Vector3(1, 0, 0);
+            case Direction.WEST:
+                return new Vector3(-1, 0, 0);
+            case Direction.SOUTH:
+                return new Vector3(0, -1, 0);
+        }
+        return Vector3.zero;
+    }
+
+    public static Vector3 Reflect(Vector3 point, Vector3 normal, Vector3 normal_vec) {
+        normal_vec = 2 * Utils.Dot(point - normal, normal_vec) * normal_vec.normalized;
+        point = -point;
+        normal *= 2;
+        return point + normal + normal_vec;
+    }
+// Use this for initialization
+void Start () {
 	
 	}
 	

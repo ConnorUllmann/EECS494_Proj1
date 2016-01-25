@@ -12,7 +12,8 @@ public class PlayerControl : MonoBehaviour {
     public float walking_velocity = 1.0f;
     public int rupee_count = 0;
     public int keys = 0; //Number of keys the player has.
-    public float health = 3.0f;
+    public float maxhealth = 3.0f;
+    public float health;
     public bool bInvincible = false;
     public float maxInvincibilityTimer = 3.0f;
     private float invincibiltyTimer = 0.0f;
@@ -58,6 +59,7 @@ public class PlayerControl : MonoBehaviour {
             Debug.LogError("Multiple players!");
         S = this;
         start_point = transform.position;
+        health = maxhealth;
 
         animation_state_machine = new StateMachine();
         animation_state_machine.ChangeState(new StateIdleWithSprite(this, GetComponent<SpriteRenderer>(), link_run_down[0]));
@@ -129,6 +131,25 @@ public class PlayerControl : MonoBehaviour {
                 Destroy(coll.gameObject);
                 rupee_count++;
                 break;
+            case "Heart":
+                Destroy(coll.gameObject);
+                if (health < maxhealth) {
+                    ++health;
+                }
+                break;
+            case "Key":
+                Destroy(coll.gameObject);
+                ++keys;
+                break;
+
+            case "BowPickup":
+                Destroy(coll.gameObject);
+                PauseMenu.S.hasBow = true;
+                break;
+            case "BoomerangPickup":
+                Destroy(coll.gameObject);
+                PauseMenu.S.hasBoomerang = true;
+                break;
 
             case "Enemy":
             case "EnemyProjectile":
@@ -165,6 +186,10 @@ public class PlayerControl : MonoBehaviour {
                 break;
             case "Wallmaster":
                 transform.position = start_point;
+                break;
+
+            case "Gravity":
+                GetComponent<Rigidbody>().useGravity = true;
                 break;
         }
     }

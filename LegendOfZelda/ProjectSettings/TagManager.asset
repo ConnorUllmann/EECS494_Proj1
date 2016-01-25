@@ -13,6 +13,12 @@ TagManager:
   - EnemyProjectile
   - Arrow
   - Wallmaster
+  - Shield
+  - Heart
+  - BowPickup
+  - BoomerangPickup
+  - Key
+  - Gravity
   layers:
   - Default
   - TransparentFX

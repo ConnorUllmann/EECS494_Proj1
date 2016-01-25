@@ -174,6 +174,12 @@ public class Tile : MonoBehaviour {
                 bc.center = Vector3.zero;
                 bc.size = Vector3.one;
                 break;
+            case 'G'://Gravity
+                gameObject.tag = "Gravity";
+                bc.center = Vector3.zero;
+                bc.size = Vector3.one;
+                bc.isTrigger = true;
+                break;
             default:
                 bc.enabled = false;
                 break;

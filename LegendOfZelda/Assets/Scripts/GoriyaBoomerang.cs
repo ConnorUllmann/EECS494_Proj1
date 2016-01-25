@@ -14,6 +14,10 @@ public class GoriyaBoomerang : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if(g == null) {
+            Destroy(this.gameObject);
+            return;
+        }
         state_machine.Update();
 	}
 
@@ -26,6 +30,9 @@ public class GoriyaBoomerang : MonoBehaviour {
             state_machine.ChangeState(new StateGoriyaBoomerangReturning(g, this, speed));
         }
 
+        if(g == null) {
+            return;
+        }
         if(coll.GetComponent<Goriya>() == g) {
             g.boomerangReturned = true;
             Destroy(this.gameObject);
