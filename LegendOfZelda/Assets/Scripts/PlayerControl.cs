@@ -9,6 +9,8 @@ public class PlayerControl : MonoBehaviour {
 
     public static PlayerControl S;
 
+    public bool twoDmovement = false;
+
     public float walking_velocity = 1.0f;
     public int rupee_count = 0;
     public int keys = 0; //Number of keys the player has.
@@ -188,9 +190,15 @@ public class PlayerControl : MonoBehaviour {
                 transform.position = start_point;
                 break;
 
-            case "Gravity":
-                GetComponent<Rigidbody>().useGravity = true;
+            case "2D":
+                twoDmovement = true;
                 break;
+        }
+    }
+
+    void OnTriggerExit(Collider coll) {
+        if(coll.gameObject.tag == "2D") {
+            twoDmovement = false;
         }
     }
 

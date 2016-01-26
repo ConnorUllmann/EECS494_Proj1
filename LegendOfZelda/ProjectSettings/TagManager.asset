@@ -18,7 +18,7 @@ TagManager:
   - BowPickup
   - BoomerangPickup
   - Key
-  - Gravity
+  - 2D
   layers:
   - Default
   - TransparentFX
