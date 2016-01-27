@@ -19,6 +19,7 @@ TagManager:
   - BoomerangPickup
   - Key
   - 2D
+  - BowRoomEntrance
   layers:
   - Default
   - TransparentFX

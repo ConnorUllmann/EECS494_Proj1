@@ -95,6 +95,7 @@
     <Compile Include="Assets\Scripts\ShowMapOnCamera.cs" />
     <Compile Include="Assets\Scripts\Stalfos.cs" />
     <Compile Include="Assets\Scripts\StateMachine.cs" />
+    <Compile Include="Assets\Scripts\TeleportToBowRoom.cs" />
     <Compile Include="Assets\Scripts\Tile.cs" />
     <Compile Include="Assets\Scripts\Utils.cs" />
     <Compile Include="Assets\Scripts\Wallmaster.cs" />

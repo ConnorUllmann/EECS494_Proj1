@@ -74,6 +74,7 @@ MonoBehaviour:
   speed_max: 0.6
   health: 1
   damagedByBoomerang: 0
+  IsWallmaster: 1
   roomCenter: {fileID: 0}
   start_point: {x: 0, y: 0, z: 0}
   wiggle:

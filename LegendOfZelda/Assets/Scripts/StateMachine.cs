@@ -293,14 +293,14 @@ public class StateIdleInvincibleAnimation : State {
         // Transition to walking animations on key press.
         if (pc.GetComponent<Rigidbody>().velocity.y < 0)
             state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_down_invincible, 6, KeyCode.DownArrow));
-        if (pc.GetComponent<Rigidbody>().velocity.y > 0)
+        else if (pc.GetComponent<Rigidbody>().velocity.y > 0)
             state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_up_invincible, 6, KeyCode.UpArrow));
-        if (pc.GetComponent<Rigidbody>().velocity.x > 0)
+       else  if (pc.GetComponent<Rigidbody>().velocity.x > 0)
             state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_right_invincible, 6, KeyCode.RightArrow));
-        if (pc.GetComponent<Rigidbody>().velocity.x < 0)
+        else if (pc.GetComponent<Rigidbody>().velocity.x < 0)
             state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_left_invincible, 6, KeyCode.LeftArrow));
 
-        if (pc.bInvincible != prevBInvincible) {
+        if (!pc.bInvincible) {
             switch (key) {
                 case KeyCode.DownArrow:
                     state_machine.ChangeState(new StateIdleWithSprite(pc, renderer, pc.link_run_down[0], key));

@@ -53,6 +53,7 @@ public class PlayerControl : MonoBehaviour {
     public bool canBoomerang = true;
     public bool hasBow = true;
     public bool canUseDoor = true;
+    private bool lookBehind = false;
 
     public Vector3 start_point;
     // Use this for initialization
@@ -104,6 +105,23 @@ public class PlayerControl : MonoBehaviour {
                 shield.GetComponent<BoxCollider>().size = new Vector3(0.2f, 1, 0.2f);
                 break;
         }
+
+        if(!GetComponent<BoxCollider>().enabled) {
+            Vector3 nextCell = new Vector3((int)transform.position.x + (GetComponent<Rigidbody>().velocity.x), (int)transform.position.y + (GetComponent<Rigidbody>().velocity.y), 0);
+            if(!Tile.Unwalkable(nextCell)) {
+                lookBehind = true;
+            } 
+        }
+        if(lookBehind) {
+            Vector3 prevCell = new Vector3((int)transform.position.x - (GetComponent<Rigidbody>().velocity.x), (int)transform.position.y - (GetComponent<Rigidbody>().velocity.y), 0);
+            if(!Tile.Unwalkable(prevCell)) {
+                GetComponent<BoxCollider>().enabled = true;
+                GetComponent<Rigidbody>().velocity = Vector3.zero;
+                lookBehind = false;
+                canUseDoor = true;
+            }
+        }
+
     }
 
     public Vector3 ShieldVector()
@@ -182,7 +200,6 @@ public class PlayerControl : MonoBehaviour {
                     {
                         canUseDoor = false;
                         MoveToNextRoom(coll);
-                        canUseDoor = true;
                     }
                 }
                 break;
@@ -191,9 +208,21 @@ public class PlayerControl : MonoBehaviour {
                 break;
 
             case "2D":
+                GoToMiddleOfTileYPosition();
                 twoDmovement = true;
                 break;
+
+            case "BowRoomEntrance":
+                control_state_machine.ChangeState(new StateLinkStunned(this, 1.0f));
+                transform.position = coll.GetComponent<TeleportToBowRoom>().target.transform.position;
+                break;
         }
+    }
+
+    public void GoToMiddleOfTileYPosition() {
+        var temp = transform.position;
+        temp.y = (int)Mathf.Round(temp.y);
+        transform.position = temp;
     }
 
     void OnTriggerExit(Collider coll) {
@@ -202,8 +231,48 @@ public class PlayerControl : MonoBehaviour {
         }
     }
 
+
+
     void MoveToNextRoom(Collider thisDoor) {
+        //Check if there is another door to go to
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, 6.0f);
+        GameObject nextDoor = null;
+
+        foreach (Collider c in hitColliders) {
+            if (c.gameObject.tag == "Door" && Vector3.Distance(thisDoor.gameObject.transform.position, c.transform.position) > 2.0f && Vector3.Distance(thisDoor.gameObject.transform.position, c.transform.position) < 5.0f) {
+                nextDoor = c.gameObject;
+                
+            }
+        }
+
+        if (nextDoor == null) {
+            Debug.Log("No door to go to");
+            return;
+        }
+
+
+
+        pauseCurrentRoom(4.0f);
+
+        Vector3 door_direction = new Vector3();
+
+        if (Utils.CollidingWithTopWall(transform.position)) {
+            door_direction = new Vector3(0, 1, 0);
+        }
+        else if (Utils.CollidingWithBottomWall(transform.position)) {
+            door_direction = new Vector3(0, -1, 0);
+        }
+        else if (Utils.CollidingWithRightWall(transform.position)) {
+            door_direction = new Vector3(1, 0, 0);
+        } 
+        else if (Utils.CollidingWithLeftWall(transform.position)) {
+            door_direction = new Vector3(-1, 0, 0);
+        }
+
+        GetComponent<BoxCollider>().enabled = false;
+        GetComponent<Rigidbody>().velocity = door_direction;
+
+        /*Collider[] hitColliders = Physics.OverlapSphere(transform.position, 6.0f);
         GameObject nextDoor = null;
 
         foreach (Collider c in hitColliders) {
@@ -230,6 +299,7 @@ public class PlayerControl : MonoBehaviour {
         transform.position = newPos;
 
         pauseCurrentRoom(2.0f);
+        */
 
     }
 
