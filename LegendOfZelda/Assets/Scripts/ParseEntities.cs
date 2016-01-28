@@ -74,11 +74,13 @@ public class ParseEntities : MonoBehaviour {
         GameObject o = null;
         switch(names[ind])
         {
+            case "Link":
+                break;
             default:
                 float x = float.Parse(objAttr["x"]);
                 float y = float.Parse(objAttr["y"]);
                 //Debug.Log(objName + ": (" + x + ", " + y + ")");
-                o = Instantiate(prefabs[ind], new Vector3(x/16f, (704-y)/16f, 0), Quaternion.identity) as GameObject;
+                o = Instantiate(prefabs[ind], new Vector3(x/16f, (704-y)/16f-1, 0), Quaternion.identity) as GameObject;
                 count++;
                 break;
         }

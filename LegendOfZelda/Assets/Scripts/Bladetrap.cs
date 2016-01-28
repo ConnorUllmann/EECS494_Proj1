@@ -3,10 +3,12 @@ using System.Collections;
 
 public class Bladetrap : Enemy
 {
+    public Vector3 startPos;
+
     // Use this for initialization
     void Start()
     {
-        GoToMiddleOfTile();
+        startPos = new Vector3((int)Mathf.Round(transform.position.x), (int)Mathf.Round(transform.position.y), 0);
         state_machine = new StateMachine();
         state_machine.ChangeState(new StateBladetrapNormal(this));
     }
@@ -30,7 +32,7 @@ public class StateBladetrapNormal : State
     {
         p = _p;
         p.GetComponent<Rigidbody>().velocity = new Vector3();
-        p.GoToMiddleOfTile();
+        p.transform.position = p.startPos;
     }
 
     public override void OnUpdate(float time_delta_fraction)
@@ -67,7 +69,7 @@ public class StateBladetrapMoving : State
         fast = _fast;
         speed = fast ? 5f : 2f;
 
-        nextCell = new Vector3((int)p.transform.position.x + dir.x, (int)p.transform.position.y + dir.y);
+        nextCell = new Vector3(Mathf.Round(p.transform.position.x), Mathf.Round(p.transform.position.y)) + dir;
         if (Utils.CollidingWithAnyWall(nextCell) || Tile.Unwalkable(nextCell))
         {
             leaveState = true;
@@ -78,18 +80,23 @@ public class StateBladetrapMoving : State
     {
         if(leaveState)
         {
-            if(fast)
-                state_machine.ChangeState(new StateBladetrapMoving(p, -dir, false));
-            else
-                state_machine.ChangeState(new StateBladetrapNormal(p));
+            Debug.Log("[0]");
+            GoToNextState();
             return;
         }
 
         p.gameObject.GetComponent<Rigidbody>().velocity = dir * speed;
 
+        Debug.DrawLine(p.transform.position, nextCell);
+
         if ((Mathf.Abs(nextCell.x - p.transform.position.x) < 0.1f && dir.x != 0.0f) ||
             (Mathf.Abs(nextCell.y - p.transform.position.y) < 0.1f && dir.y != 0.0f))
         {
+            if(nextCell == p.startPos && !fast)
+            {
+                GoToNextState();
+                return;
+            }
             nextCell = new Vector3(nextCell.x + dir.x, nextCell.y + dir.y);
             if (Utils.CollidingWithAnyWall(nextCell) || Tile.Unwalkable(nextCell))
             {

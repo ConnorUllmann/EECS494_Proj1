@@ -414,6 +414,11 @@ public class StateLinkAttack : State
             if (!p.hasBow)
                 return;
         }
+        else if(weapon_prefab.gameObject.tag == "Weapon")
+        {
+            if (!p.canLaserSword)
+                return;
+        }
 
         p.current_state = EntityState.ATTACKING;
 
@@ -466,7 +471,7 @@ public class StateLinkAttack : State
         if (weapon_instance == null) return;
         if (weapon_instance.tag == "Weapon")
         {
-            if(p.health >= p.maxhealth)
+            if (p.health >= p.maxhealth)
                 weapon_instance.GetComponent<Sword>().Shoot();
             else
                 MonoBehaviour.Destroy(weapon_instance);

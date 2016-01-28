@@ -55,6 +55,7 @@ public class PlayerControl : MonoBehaviour {
     public bool hasBow = true;
     public bool canUseDoor = true;
     private bool lookBehind = false;
+    public bool canLaserSword = true;
 
     public Vector3 start_point;
     // Use this for initialization
@@ -71,11 +72,22 @@ public class PlayerControl : MonoBehaviour {
         control_state_machine = new StateMachine();
         control_state_machine.ChangeState(new StateLinkNormalMovement(this));
 
-        ActivateObjectsInRoom();
+        roomPos = new Vector3(-1000000, -1000000);
     }
 
+
+    Vector3 roomPos;
+
     // Update is called once per frame
-    void Update() {
+    void Update()
+    {
+        var roomPosNew = new Vector3(Utils.GetRoomI(transform.position.x), Utils.GetRoomJ(transform.position.y));
+        if (roomPos != roomPosNew)
+        {
+            ActivateObjectsInRoom();
+            roomPos = roomPosNew;
+        }
+
         animation_state_machine.Update();
         control_state_machine.Update();
         if (control_state_machine.IsFinished())
@@ -87,6 +99,9 @@ public class PlayerControl : MonoBehaviour {
                 invincibiltyTimer = maxInvincibilityTimer;
             }
         }
+
+
+        //Debug.Log(Utils.GetTileInRoomI(transform.position.x) + ", " + Utils.GetTileInRoomJ(transform.position.y));
 
 
         switch (current_direction)
@@ -153,7 +168,7 @@ public class PlayerControl : MonoBehaviour {
         {
             deactivated.Remove(newlyActive[i]);
         }
-        Debug.Log("Deactive objects: " + deactivated.Count);
+        //Debug.Log("Deactive objects: " + deactivated.Count);
     }
     //Activates/deactivates an individual objects based on whether or not it is in the same room as the player.
     bool TestDeactivateObject(GameObject go)
@@ -295,7 +310,6 @@ public class PlayerControl : MonoBehaviour {
             Debug.Log("No door to go to");
             return;
         }
-
 
 
         pauseCurrentRoom(4.0f);

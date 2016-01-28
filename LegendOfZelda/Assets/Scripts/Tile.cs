@@ -88,7 +88,7 @@ public class Tile : MonoBehaviour {
         int x_ = (int)pos.x;
         int y_ = (int)pos.y;
         //Debug.Log("(" + x_ + ", " + y_ + ") " + tiles.Count + ", " + (tiles[x_] == null ? "null" : tiles[x_].Count.ToString()));
-        if (x_ >= tiles.Count || y_ >= tiles[x_].Count)
+        if (x_ < 0 || x_ >= tiles.Count || y_ < 0 || y_ >= tiles[x_].Count)
             return null;
         return tiles[x_][y_];
     }

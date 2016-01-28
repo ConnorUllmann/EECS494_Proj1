@@ -38,6 +38,7 @@ public class Sword : MonoBehaviour {
 
     public void Shoot()
     {
+        PlayerControl.S.canLaserSword = false;
         shot = true;
         GetComponent<Rigidbody>().velocity = new Vector3(speed * Mathf.Cos(transform.eulerAngles.z * Mathf.PI / 180), speed * Mathf.Sin(transform.eulerAngles.z * Mathf.PI / 180), 0);
     }
@@ -50,6 +51,7 @@ public class Sword : MonoBehaviour {
 
     public void BlowUp()
     {
+        PlayerControl.S.canLaserSword = true;
         GameObject go = Instantiate(explosivePrefab, transform.position, Quaternion.identity) as GameObject;
         Destroy(this.gameObject);
     }

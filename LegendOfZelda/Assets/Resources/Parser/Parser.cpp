@@ -51,6 +51,7 @@ void PrintTiles(string inputFilename)
 		{
 			int ind = line.find(">")+1;
 			line = line.substr(ind, line.length() - ind);
+			all.push_back(Modify(line));
 			modify = true;
 		}
 		//Find the "Tiles" xml end tag to stop converting lines of tile data
@@ -58,10 +59,10 @@ void PrintTiles(string inputFilename)
 		{
 			int ind = line.find("<");
 			line = line.substr(0, ind);
+			all.push_back(Modify(line));
 			modify = false;
 		}
-		
-		if(modify)
+		else if(modify)
 			all.push_back(Modify(line));
 		
     } while(in);
