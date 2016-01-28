@@ -156,31 +156,34 @@ public class Tile : MonoBehaviour {
         type = c;
         switch (c) {
             case 'S': // Solid
+                gameObject.tag = "Untagged";
                 bc.center = Vector3.zero;
                 bc.size = Vector3.one;
                 break;
             case 'D': //Door
-                tag = "Door";
+                gameObject.tag = "Door";
                 bc.center = Vector3.zero;
                 bc.size = new Vector3(.25f, .25f, .25f);
                 bc.isTrigger = true;
                 break;
             case 'L': //Locked Door
-                tag = "Door";
+                gameObject.tag = "Door";
                 open = false;
                 break;
             case 'W': //Water
+                gameObject.tag = "Untagged";
                 gameObject.layer = 4;
                 bc.center = Vector3.zero;
                 bc.size = Vector3.one;
                 break;
-            case 'G'://Gravity
-                gameObject.tag = "Gravity";
+            case '2'://2D
+                gameObject.tag = "2D";
                 bc.center = Vector3.zero;
-                bc.size = Vector3.one;
+                bc.size = new Vector3(.8f, .8f, .8f);
                 bc.isTrigger = true;
                 break;
             default:
+                gameObject.tag = "Untagged";
                 bc.enabled = false;
                 break;
         }

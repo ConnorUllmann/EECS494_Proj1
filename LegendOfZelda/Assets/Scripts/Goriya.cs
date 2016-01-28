@@ -26,13 +26,14 @@ public class Goriya : Enemy {
     public override void Update() {
         base.Update();
         cooldownTimer -= Time.deltaTime;
-        if (cooldownTimer <= 0) {
-            state_machine.ChangeState(new StateGoriyaThrowBoomerang(this));
-            cooldownTimer = (Random.value * maxWalkTime) + minWalkTime;
-        }
+
 
         if (boomerangReturned) {
             boomerangReturned = false;
+            state_machine.ChangeState(new StateGoriyaWalk(this, GetComponent<SpriteRenderer>()));
+        }
+
+        if(state_machine.IsFinished()) {
             state_machine.ChangeState(new StateGoriyaWalk(this, GetComponent<SpriteRenderer>()));
         }
 
@@ -46,6 +47,7 @@ public class StateGoriyaWalk : State {
     Sprite[] animation;
     Rigidbody rb;
     float current_frame_index = 0;
+    float cooldownTimer;
 
     Vector3 direction;
     Vector3 nextCell;
@@ -56,6 +58,7 @@ public class StateGoriyaWalk : State {
         rb = g.GetComponent<Rigidbody>();
 
         g.GoToMiddleOfTile();
+        cooldownTimer = (Random.value * g.maxWalkTime) + g.minWalkTime;
 
         do {
             direction = Utils.RandomDirection4();
@@ -91,6 +94,12 @@ public class StateGoriyaWalk : State {
         nextCell = new Vector3((int)g.transform.position.x + (direction.x), (int)g.transform.position.y + (direction.y), 0);
         if (Tile.Unwalkable(nextCell) || Utils.CollidingWithAnyWall(nextCell)) {
             state_machine.ChangeState(new StateGoriyaWalk(g, g.GetComponent<SpriteRenderer>()));
+        }
+
+        cooldownTimer -= Time.deltaTime;
+        if (cooldownTimer <= 0) {
+            state_machine.ChangeState(new StateGoriyaThrowBoomerang(g));
+            cooldownTimer = (Random.value * g.maxWalkTime) + g.minWalkTime;
         }
     }
 }

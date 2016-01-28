@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
     public float speed_max;
     public float health = 1.0f;
     public bool damagedByBoomerang = false;
+    public bool IsWallmaster = false;
 
     // Use this for initialization
     void Start()
@@ -30,6 +31,10 @@ public class Enemy : MonoBehaviour
     {
     	if(health <=0) {
             Destroy(this.gameObject);
+        }
+
+        if(!Utils.AreInSameRoom(gameObject, PlayerControl.S.gameObject) && !IsWallmaster) { 
+            state_machine.ChangeState(new StateEnemyStunned(this, 2.0f));
         }
     }
 
