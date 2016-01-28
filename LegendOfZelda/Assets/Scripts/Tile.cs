@@ -87,7 +87,7 @@ public class Tile : MonoBehaviour {
     {
         int x_ = (int)pos.x;
         int y_ = (int)pos.y;
-        //Debug.Log("(" + x_ + ", " + y_ + ") " + pos);
+        //Debug.Log("(" + x_ + ", " + y_ + ") " + tiles.Count + ", " + (tiles[x_] == null ? "null" : tiles[x_].Count.ToString()));
         if (x_ >= tiles.Count || y_ >= tiles[x_].Count)
             return null;
         return tiles[x_][y_];
@@ -96,10 +96,15 @@ public class Tile : MonoBehaviour {
     public static bool Unwalkable(Vector3 pos)
     {
         var tile = GetTile(pos);
-        BoxCollider collider = null;
         if (tile != null)
-            collider = tile.GetComponent<BoxCollider>();
-        return tile != null && collider != null && collider.enabled;
+        {
+            var collider = tile.GetComponent<BoxCollider>();
+            if (collider != null)
+            {
+                return collider.enabled;
+            }
+        }
+        return false;
     }
 
 	public void SetTile(int eX, int eY, int eTileNum = -1) {

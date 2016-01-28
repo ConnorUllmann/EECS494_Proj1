@@ -9,6 +9,7 @@ public class PlayerControl : MonoBehaviour {
 
     public static PlayerControl S;
 
+
     public bool twoDmovement = false;
 
     public float walking_velocity = 1.0f;
@@ -69,6 +70,8 @@ public class PlayerControl : MonoBehaviour {
 
         control_state_machine = new StateMachine();
         control_state_machine.ChangeState(new StateLinkNormalMovement(this));
+
+        ActivateObjectsInRoom();
     }
 
     // Update is called once per frame
@@ -86,7 +89,7 @@ public class PlayerControl : MonoBehaviour {
         }
 
 
-        switch(current_direction)
+        switch (current_direction)
         {
             case Direction.NORTH:
                 shield.transform.position = Vector3.zero + transform.position;
@@ -119,9 +122,52 @@ public class PlayerControl : MonoBehaviour {
                 GetComponent<Rigidbody>().velocity = Vector3.zero;
                 lookBehind = false;
                 canUseDoor = true;
+                ActivateObjectsInRoom();
             }
         }
 
+    }
+
+    public List<string> OffscreenStopNames; //Names for objects that will be disabled when offscreen
+    private List<GameObject> deactivated = new List<GameObject>(); //Objects that have been deactivated by the player for not being in the same room.
+    //Activates objects in the same room as the player and deactivates those that aren't.
+    void ActivateObjectsInRoom()
+    {
+        GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
+        foreach (GameObject go in allObjects)
+        {
+            if (!TestDeactivateObject(go))
+            {
+                deactivated.Add(go);
+            }
+        }
+        List<GameObject> newlyActive = new List<GameObject>();
+        foreach (GameObject go in deactivated)
+        {
+            if (TestDeactivateObject(go))
+            {
+                newlyActive.Add(go);
+            }
+        }
+        for (int i = 0; i < newlyActive.Count; i++)
+        {
+            deactivated.Remove(newlyActive[i]);
+        }
+        Debug.Log("Deactive objects: " + deactivated.Count);
+    }
+    //Activates/deactivates an individual objects based on whether or not it is in the same room as the player.
+    bool TestDeactivateObject(GameObject go)
+    {
+        for (int i = 0; i < OffscreenStopNames.Count; i++)
+        {
+            if (go.name.Contains(OffscreenStopNames[i]))
+            {
+                bool active = Utils.AreInSameRoom(go, PlayerControl.S.gameObject);
+                go.SetActive(active);
+                return active;
+            }
+        }
+        return go.activeSelf;
     }
 
     public Vector3 ShieldVector()

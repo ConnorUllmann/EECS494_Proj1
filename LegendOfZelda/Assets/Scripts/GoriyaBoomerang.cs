@@ -13,8 +13,9 @@ public class GoriyaBoomerang : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        if(g == null) {
+	void Update ()
+    {
+        if (g == null) {
             Destroy(this.gameObject);
             return;
         }

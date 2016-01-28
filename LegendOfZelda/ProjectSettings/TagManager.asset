@@ -20,6 +20,7 @@ TagManager:
   - Key
   - 2D
   - BowRoomEntrance
+  - SwordExplosive
   layers:
   - Default
   - TransparentFX
@@ -29,7 +30,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Projectile
   - 
   - 
   - 

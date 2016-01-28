@@ -319,7 +319,9 @@ public class StateIdleInvincibleAnimation : State {
 public class StateLinkNormalMovement : State
 {
     PlayerControl p;
-        
+
+    private int weapon_cooldown = 10;
+
     public StateLinkNormalMovement(PlayerControl _p)
     {
         p = _p;
@@ -360,11 +362,11 @@ public class StateLinkNormalMovement : State
                 if (p.rupee_count > 0)
                 {
                     p.rupee_count--;
-                    state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_A_button, 15));
+                    state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_A_button, weapon_cooldown));
                 }
             }
             else
-                state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_A_button, 15));
+                state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_A_button, weapon_cooldown));
         }
         else if(Input.GetKeyDown(KeyCode.S) && p.selected_weapon_prefab_B_button != null)
         {
@@ -373,11 +375,11 @@ public class StateLinkNormalMovement : State
                 if (p.rupee_count > 0)
                 {
                     p.rupee_count--;
-                    state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_B_button, 15));
+                    state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_B_button, weapon_cooldown));
                 }
             }
             else
-                state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_B_button, 15));
+                state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_B_button, weapon_cooldown));
         }
 
         p.transform.position = pos;
@@ -462,9 +464,13 @@ public class StateLinkAttack : State
     {
         p.current_state = EntityState.NORMAL;
         if (weapon_instance == null) return;
-        if(weapon_instance.tag != "Boomerang" &&
-            weapon_instance.tag != "Arrow")
-            MonoBehaviour.Destroy(weapon_instance);
+        if (weapon_instance.tag == "Weapon")
+        {
+            if(p.health >= p.maxhealth)
+                weapon_instance.GetComponent<Sword>().Shoot();
+            else
+                MonoBehaviour.Destroy(weapon_instance);
+        }
     }
 }
 

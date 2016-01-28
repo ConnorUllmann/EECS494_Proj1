@@ -77,7 +77,7 @@ public class ParseEntities : MonoBehaviour {
             default:
                 float x = float.Parse(objAttr["x"]);
                 float y = float.Parse(objAttr["y"]);
-                Debug.Log(objName + ": (" + x + ", " + y + ")");
+                //Debug.Log(objName + ": (" + x + ", " + y + ")");
                 o = Instantiate(prefabs[ind], new Vector3(x/16f, (704-y)/16f, 0), Quaternion.identity) as GameObject;
                 count++;
                 break;

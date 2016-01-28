@@ -29,13 +29,13 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     public virtual void Update()
     {
-    	if(health <=0) {
+        if (health <=0) {
             Destroy(this.gameObject);
         }
 
-        if(!Utils.AreInSameRoom(gameObject, PlayerControl.S.gameObject) && !IsWallmaster) { 
+        /*if(!Utils.AreInSameRoom(gameObject, PlayerControl.S.gameObject) && !IsWallmaster) { 
             state_machine.ChangeState(new StateEnemyStunned(this, 2.0f));
-        }
+        }*/
     }
 
     public virtual void Hit(Collider coll=null)
@@ -43,10 +43,15 @@ public class Enemy : MonoBehaviour
         health--;
     }
 
-    public virtual void OnTriggerEnter(Collider coll) {
-        if(coll.gameObject.tag == "Weapon" ||
-           (coll.gameObject.tag == "Boomerang" && damagedByBoomerang) ||
-           coll.gameObject.tag == "Arrow") {
+    public virtual void OnTriggerEnter(Collider coll)
+    {
+        if (coll.gameObject.tag == "Weapon")
+        {
+            coll.gameObject.GetComponent<Sword>().Hit();
+            Hit(coll);
+        }
+        else if ((coll.gameObject.tag == "Boomerang" && damagedByBoomerang) || coll.gameObject.tag == "Arrow" || coll.gameObject.tag == "SwordExplosive")
+        {
             Hit(coll);
         }
         if(coll.gameObject.tag == "Boomerang" && !damagedByBoomerang) {

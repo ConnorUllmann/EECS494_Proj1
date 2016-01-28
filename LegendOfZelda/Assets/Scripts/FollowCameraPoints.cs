@@ -7,6 +7,16 @@ public class FollowCameraPoints : MonoBehaviour {
     public Vector3 offset = new Vector3(0, 0, -10);
     public float easing = 0.1f;
 
+    void Start()
+    {
+        Vector3 p0, p1;
+        p0 = transform.position;
+        p1 = CameraPoints.GetClosestCameraPoint().transform.position + offset;
+
+
+        transform.position = p1;
+
+    }
 
     // Update is called once per frame
     void Update() {

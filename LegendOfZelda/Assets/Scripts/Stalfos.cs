@@ -48,9 +48,11 @@ public class StateStalfosNormal : State {
 
         s.GoToMiddleOfTile();
 
+        //Debug.Log(Tile.Unwalkable(new Vector3(36, 49)));
+
         do {
             direction = Utils.RandomDirection4();
-            nextCell = new Vector3((int)s.transform.position.x + (direction.x * s.speed_max), (int)s.transform.position.y + (direction.y * s.speed_max), 0);
+            nextCell = new Vector3((int)s.transform.position.x + (direction.x), (int)s.transform.position.y + (direction.y), 0);
         } while (Tile.Unwalkable(nextCell) || Utils.CollidingWithAnyWall(nextCell));
         
 
@@ -64,7 +66,7 @@ public class StateStalfosNormal : State {
         while (current_frame_index > animation.Length)
             current_frame_index -= animation.Length;
         renderer.sprite = animation[(int)current_frame_index];
-        nextCell = new Vector3((int)s.transform.position.x + (direction.x * s.speed_max), (int)s.transform.position.y + (direction.y * s.speed_max), 0);
+        nextCell = new Vector3((int)s.transform.position.x + (direction.x), (int)s.transform.position.y + (direction.y), 0);
         if(Tile.Unwalkable(nextCell) || Utils.CollidingWithAnyWall(nextCell)) {
             state_machine.ChangeState(new StateStalfosNormal(s, s.GetComponent<SpriteRenderer>(), animation));
         }

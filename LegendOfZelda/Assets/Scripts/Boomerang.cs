@@ -12,7 +12,8 @@ public class Boomerang : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
         state_machine.Update();
 	}
 

@@ -10,6 +10,8 @@ GameObject:
   - 4: {fileID: 477758}
   - 212: {fileID: 21263528}
   - 65: {fileID: 6554008}
+  - 114: {fileID: 11405574}
+  - 54: {fileID: 5452742}
   m_Layer: 0
   m_Name: Sword
   m_TagString: Weapon
@@ -29,6 +31,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!54 &5452742
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 198378}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 120
+  m_CollisionDetection: 0
 --- !u!65 &6554008
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -41,6 +58,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.4375, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &11405574
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 198378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd3343d5110893e4889eea91e34553f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flash:
+  - {fileID: 21300274, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
+  - {fileID: 21300304, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
+  explosivePrefab: {fileID: 169164, guid: 354d8cf68555ef74c9c9155129630ecd, type: 2}
+  speed: 10
 --- !u!212 &21263528
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -79,6 +112,14 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 0}
+      propertyPath: flash.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: animation.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: m_SortingOrder
       value: 1
       objectReference: {fileID: 0}
@@ -89,6 +130,22 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_IsTrigger
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: explosivePrefab
+      value: 
+      objectReference: {fileID: 169164, guid: 354d8cf68555ef74c9c9155129630ecd, type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Constraints
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: speed
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
