@@ -23,7 +23,7 @@ public class OldMan : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        script.enabled = InSameRoom(PlayerControl.S.transform.position, transform.position);
+        script.enabled = Utils.AreInSameRoom(PlayerControl.S.gameObject, gameObject);
 
         if (script.enabled)
         {
@@ -38,11 +38,5 @@ public class OldMan : MonoBehaviour {
         {
             timeStart = Time.time;
         }
-    }
-
-    //Returns if a and b are in the same room.
-    bool InSameRoom(Vector3 a, Vector3 b)
-    {
-        return Utils.GetRoomX(a.x) == Utils.GetRoomX(b.x) && Utils.GetRoomY(a.y) == Utils.GetRoomY(b.y);
     }
 }

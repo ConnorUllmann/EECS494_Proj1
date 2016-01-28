@@ -332,7 +332,7 @@ public class StateLinkNormalMovement : State
         float h_input = Input.GetAxis("Horizontal");
         float v_input = Input.GetAxis("Vertical");
 
-        if(v_input != 0.0f)
+        if (v_input != 0.0f)
         {
             pos.x += (Mathf.Round(pos.x * 2) / 2 - pos.x) / 2;
             h_input = 0.0f;
@@ -354,9 +354,30 @@ public class StateLinkNormalMovement : State
             p.current_direction = Direction.SOUTH;
 
         if (Input.GetKeyDown(KeyCode.A) && p.selected_weapon_prefab_A_button != null)
-            state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_A_button, 15));
-        else if(Input.GetKeyDown(KeyCode.S) && p.selected_weapon_prefab_B_button != null) {
-            state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_B_button, 15));
+        {
+            if (p.selected_weapon_prefab_A_button.GetComponent<Arrow>() != null)
+            {
+                if (p.rupee_count > 0)
+                {
+                    p.rupee_count--;
+                    state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_A_button, 15));
+                }
+            }
+            else
+                state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_A_button, 15));
+        }
+        else if(Input.GetKeyDown(KeyCode.S) && p.selected_weapon_prefab_B_button != null)
+        {
+            if (p.selected_weapon_prefab_B_button.GetComponent<Arrow>() != null)
+            {
+                if (p.rupee_count > 0)
+                {
+                    p.rupee_count--;
+                    state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_B_button, 15));
+                }
+            }
+            else
+                state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_B_button, 15));
         }
 
         p.transform.position = pos;

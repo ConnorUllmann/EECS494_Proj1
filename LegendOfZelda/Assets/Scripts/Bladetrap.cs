@@ -31,7 +31,6 @@ public class StateBladetrapNormal : State
         p = _p;
         p.GetComponent<Rigidbody>().velocity = new Vector3();
         p.GoToMiddleOfTile();
-        Debug.Log("Stopped!");
     }
 
     public override void OnUpdate(float time_delta_fraction)
