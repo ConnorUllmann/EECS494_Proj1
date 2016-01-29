@@ -344,6 +344,10 @@ public class StateLinkNormalMovement : State
             pos.y += (Mathf.Round(pos.y * 2) / 2 - pos.y) / 2;
         }
 
+        if(PlayerControl.S.twoDmovement == true) {
+            v_input = 0.0f;
+        }
+
         p.GetComponent<Rigidbody>().velocity = new Vector3(h_input, v_input, 0) * p.walking_velocity;
 
         if (h_input > 0.0f)

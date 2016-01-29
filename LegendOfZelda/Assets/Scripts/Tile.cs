@@ -184,7 +184,7 @@ public class Tile : MonoBehaviour {
             case '2'://2D
                 gameObject.tag = "2D";
                 bc.center = Vector3.zero;
-                bc.size = new Vector3(.8f, .8f, .8f);
+                bc.size = new Vector3(.9f, 1.1f, .8f);
                 bc.isTrigger = true;
                 break;
             default:
