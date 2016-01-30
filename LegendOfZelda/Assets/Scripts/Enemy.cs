@@ -3,6 +3,9 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
+    public GameObject[] possibleItemDrops;
+    public float dropChance = 0.5f;
+
 
     public Direction current_direction = Direction.SOUTH;
     public EntityState current_state = EntityState.NORMAL;
@@ -31,6 +34,12 @@ public class Enemy : MonoBehaviour
     {
         if (health <=0) {
             Destroy(this.gameObject);
+
+            if(Random.value < dropChance) {
+                GameObject temp = Instantiate(possibleItemDrops[(Mathf.FloorToInt((Random.value - .001f) * possibleItemDrops.Length))],
+                                                transform.position, new Quaternion()) as GameObject;
+            }
+
         }
 
         /*if(!Utils.AreInSameRoom(gameObject, PlayerControl.S.gameObject) && !IsWallmaster) { 

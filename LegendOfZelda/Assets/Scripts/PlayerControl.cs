@@ -280,6 +280,18 @@ public class PlayerControl : MonoBehaviour {
         }
     }
 
+    void OnCollisionEnter(Collision coll) {
+        if(coll.gameObject.tag == "Door") {
+            if (!coll.collider.GetComponent<Tile>().open &&
+                !Tile.redDoors.Contains(coll.collider.GetComponent<Tile>()) &&
+                !Tile.greenDoors.Contains(coll.collider.GetComponent<Tile>()) &&
+                keys > 0) {
+                --keys;
+                coll.collider.GetComponent<Tile>().Open();
+            }
+        }
+    }
+
     public void GoToMiddleOfTileYPosition() {
         var temp = transform.position;
         temp.y = (int)Mathf.Round(temp.y);
@@ -330,7 +342,7 @@ public class PlayerControl : MonoBehaviour {
         }
 
         GetComponent<BoxCollider>().enabled = false;
-        GetComponent<Rigidbody>().velocity = door_direction;
+        GetComponent<Rigidbody>().velocity = door_direction * 1.1f;
 
         /*Collider[] hitColliders = Physics.OverlapSphere(transform.position, 6.0f);
         GameObject nextDoor = null;

@@ -69,9 +69,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 750a2ad3e92812b4eb96288fff6bf40d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  possibleItemDrops:
+  - {fileID: 157346, guid: a91ffba5c9abe9d41a3a48bd7ff8d7ca, type: 2}
+  - {fileID: 120244, guid: a2bc2ea4aa4c8e544a1a1ec0037fdfba, type: 2}
+  dropChance: 0.5
   current_direction: 2
   current_state: 0
   speed_max: 3
+  health: 1
+  damagedByBoomerang: 1
+  IsWallmaster: 0
   stand:
   - {fileID: 21300000, guid: 1477056655a994341b74634becb2122f, type: 3}
   - {fileID: 21300002, guid: 1477056655a994341b74634becb2122f, type: 3}
@@ -113,6 +120,10 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 0}
+      propertyPath: possibleItemDrops.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
@@ -130,6 +141,18 @@ Prefab:
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: damagedByBoomerang
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: possibleItemDrops.Array.data[0]
+      value: 
+      objectReference: {fileID: 157346, guid: a91ffba5c9abe9d41a3a48bd7ff8d7ca, type: 2}
+    - target: {fileID: 0}
+      propertyPath: possibleItemDrops.Array.data[1]
+      value: 
+      objectReference: {fileID: 120244, guid: a2bc2ea4aa4c8e544a1a1ec0037fdfba, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100202}
