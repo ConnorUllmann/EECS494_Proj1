@@ -382,6 +382,12 @@ public class StateLinkNormalMovement : State
                     state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_B_button, weapon_cooldown));
                 }
             }
+            else if (p.selected_weapon_prefab_B_button.GetComponent<Bomb>() != null) {
+                if(p.bombs > 0) {
+                    --p.bombs;
+                    state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_B_button, weapon_cooldown));
+                }
+            }
             else
                 state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_B_button, weapon_cooldown));
         }

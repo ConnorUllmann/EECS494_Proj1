@@ -12,6 +12,7 @@ public class PauseMenu : MonoBehaviour {
 
     public Text healthText;
     public Text rupeeText;
+    public Text keysText;
 
     public bool hasBow;
     public bool hasBoomerang;
@@ -19,8 +20,8 @@ public class PauseMenu : MonoBehaviour {
     private RectTransform rt;
     private bool isPaused = false;
     private int currentMenuPointer = 0;
-    private int usedAWeapon = 0;
-    private int usedBWeapon = -1;
+    public int usedAWeapon = 0;
+    public int usedBWeapon = -1;
 	// Use this for initialization
 	void Awake () {
         if(S != null) {
@@ -41,6 +42,7 @@ public class PauseMenu : MonoBehaviour {
 	void Update () {
         rupeeText.text = "Rupees: " + PlayerControl.S.rupee_count.ToString();
         healthText.text = "Health:  " + PlayerControl.S.health.ToString();
+        keysText.text = "Keys:    " + PlayerControl.S.keys.ToString();
 
 
         if (Input.GetKeyDown(KeyCode.Return)) {
@@ -64,6 +66,10 @@ public class PauseMenu : MonoBehaviour {
             if(Input.GetKeyDown(KeyCode.UpArrow) && currentMenuPointer > 0) {
                 --currentMenuPointer;
             }
+
+
+            //Turns out you can't have anything other than sword on A
+            /*
             if(Input.GetKeyDown(KeyCode.A)) {
                 PlayerControl.S.selected_weapon_prefab_A_button = weaponPrefabs[currentMenuPointer];
                 usedAWeapon = currentMenuPointer;
@@ -72,7 +78,12 @@ public class PauseMenu : MonoBehaviour {
                     usedBWeapon = -1;
                 }
             }
+            */
             if (Input.GetKeyDown(KeyCode.S)) {
+                if(currentMenuPointer == 0) {
+                    return;
+                }
+
                 PlayerControl.S.selected_weapon_prefab_B_button = weaponPrefabs[currentMenuPointer];
                 usedBWeapon = currentMenuPointer;
                 if(usedAWeapon == usedBWeapon) {
@@ -88,7 +99,10 @@ public class PauseMenu : MonoBehaviour {
                     --currentMenuPointer;
             }
             if(currentMenuPointer == 2 && !hasBow) {
-                currentMenuPointer = 0;
+                if (Input.GetKeyDown(KeyCode.DownArrow))
+                    ++currentMenuPointer;
+                else
+                    currentMenuPointer = 0;
             }
 
             for (int i=0; i<weaponTexts.Length; ++i) {
@@ -98,10 +112,10 @@ public class PauseMenu : MonoBehaviour {
                 }
 
                 if (i == usedAWeapon) {
-                    toDisplay = "<color=#00ffffff>" + toDisplay + "</color>";
+                    toDisplay = "<color=#00ffffff>A:" + toDisplay + "</color>";
                 }
                 if(i == usedBWeapon) {
-                    toDisplay = "<color=#ff00ffff>" + toDisplay + "</color>";
+                    toDisplay = "<color=#ff00ffff>B:" + toDisplay + "</color>";
                 }
 
 

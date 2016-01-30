@@ -6,6 +6,9 @@ public class HUD : MonoBehaviour {
 
     public Text rupee_text;
     public Text health_text;
+    public Text key_text;
+    public Text weaponAText;
+    public Text weaponBText;
 
 	// Use this for initialization
 	void Start ()
@@ -18,5 +21,10 @@ public class HUD : MonoBehaviour {
     {
         rupee_text.text = "Rupees: " + PlayerControl.S.rupee_count.ToString();
         health_text.text = "Health:   " + PlayerControl.S.health.ToString();
-	}
+        key_text.text = "Keys:     " + PlayerControl.S.keys.ToString();
+
+        weaponAText.text = "<color=#00ffffff>A:" + PauseMenu.S.weaponNames[PauseMenu.S.usedAWeapon] + "</color>";
+        weaponBText.text = "<color=#ff00ffff>B:" + ((PauseMenu.S.usedBWeapon == -1) ? "" : PauseMenu.S.weaponNames[PauseMenu.S.usedBWeapon]) + "</color>";
+
+    }
 }

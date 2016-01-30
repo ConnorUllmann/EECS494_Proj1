@@ -15,6 +15,7 @@ public class PlayerControl : MonoBehaviour {
     public float walking_velocity = 1.0f;
     public int rupee_count = 0;
     public int keys = 0; //Number of keys the player has.
+    public int bombs = 0;
     public float maxhealth = 3.0f;
     public float health;
     public bool bInvincible = false;
@@ -221,6 +222,10 @@ public class PlayerControl : MonoBehaviour {
             case "Key":
                 Destroy(coll.gameObject);
                 ++keys;
+                break;
+            case "BombPickup":
+                Destroy(coll.gameObject);
+                ++bombs;
                 break;
 
             case "BowPickup":

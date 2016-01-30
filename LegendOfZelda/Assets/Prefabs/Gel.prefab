@@ -72,6 +72,7 @@ MonoBehaviour:
   possibleItemDrops:
   - {fileID: 157346, guid: a91ffba5c9abe9d41a3a48bd7ff8d7ca, type: 2}
   - {fileID: 120244, guid: a2bc2ea4aa4c8e544a1a1ec0037fdfba, type: 2}
+  - {fileID: 146502, guid: 23d00624372031f41b836d4ed215c949, type: 2}
   dropChance: 0.5
   current_direction: 2
   current_state: 0
@@ -121,7 +122,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 0}
       propertyPath: possibleItemDrops.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_IsTrigger
@@ -153,6 +154,10 @@ Prefab:
       propertyPath: possibleItemDrops.Array.data[1]
       value: 
       objectReference: {fileID: 120244, guid: a2bc2ea4aa4c8e544a1a1ec0037fdfba, type: 2}
+    - target: {fileID: 0}
+      propertyPath: possibleItemDrops.Array.data[2]
+      value: 
+      objectReference: {fileID: 146502, guid: 23d00624372031f41b836d4ed215c949, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100202}

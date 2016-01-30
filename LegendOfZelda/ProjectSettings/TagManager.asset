@@ -21,6 +21,7 @@ TagManager:
   - 2D
   - BowRoomEntrance
   - SwordExplosive
+  - BombPickup
   layers:
   - Default
   - TransparentFX
