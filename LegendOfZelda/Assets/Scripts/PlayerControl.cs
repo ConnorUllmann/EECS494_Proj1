@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -57,10 +58,11 @@ public class PlayerControl : MonoBehaviour {
     public bool canUseDoor = true;
     private bool lookBehind = false;
     public bool canLaserSword = true;
+    private bool permanentInvincibility = false;
 
     public Vector3 start_point;
     // Use this for initialization
-    void Start() {
+    void Awake() {
         if (S != null)
             Debug.LogError("Multiple players!");
         S = this;
@@ -79,9 +81,20 @@ public class PlayerControl : MonoBehaviour {
 
     Vector3 roomPos;
 
+    private bool alreadyDying = false;
     // Update is called once per frame
     void Update()
     {
+
+        if(health <= 0 && !alreadyDying) {
+            alreadyDying = true;
+            control_state_machine.ChangeState(new StateLinkDead(2.0f));
+        }
+
+        if(Input.GetKeyDown(KeyCode.I)) {
+            permanentInvincibility = (permanentInvincibility ? false : true);
+        }
+
         var roomPosNew = new Vector3(Utils.GetRoomI(transform.position.x), Utils.GetRoomJ(transform.position.y));
         if (roomPos != roomPosNew)
         {
@@ -227,6 +240,17 @@ public class PlayerControl : MonoBehaviour {
                 Destroy(coll.gameObject);
                 ++bombs;
                 break;
+            case "Triforce":
+                Destroy(coll.gameObject);
+                health = maxhealth;
+
+                control_state_machine.ChangeState(new StateLinkVictory(3.0f));
+
+                break;
+            case "HeartPiece":
+                Destroy(coll.gameObject);
+                ++maxhealth;
+                break;
 
             case "BowPickup":
                 Destroy(coll.gameObject);
@@ -236,10 +260,19 @@ public class PlayerControl : MonoBehaviour {
                 Destroy(coll.gameObject);
                 PauseMenu.S.hasBoomerang = true;
                 break;
+            case "MapPickup":
+                Destroy(coll.gameObject);
+                PauseMenu.S.hasMap = true;
+                break;
+            case "CompassPickup":
+                Destroy(coll.gameObject);
+                PauseMenu.S.hasCompass = true;
+                break;
+
 
             case "Enemy":
             case "EnemyProjectile":
-                if (!bInvincible)
+                if (!bInvincible && !permanentInvincibility)
                 {
                     --health;
                     bInvincible = true;

@@ -88,12 +88,14 @@
     <Compile Include="Assets\Scripts\GreenSwitch.cs" />
     <Compile Include="Assets\Scripts\HUD.cs" />
     <Compile Include="Assets\Scripts\Keese.cs" />
+    <Compile Include="Assets\Scripts\MainMenu.cs" />
     <Compile Include="Assets\Scripts\OldMan.cs" />
     <Compile Include="Assets\Scripts\ParseEntities.cs" />
     <Compile Include="Assets\Scripts\ParseZeldaMap.cs" />
     <Compile Include="Assets\Scripts\ParticleEffect.cs" />
     <Compile Include="Assets\Scripts\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\PlayerControl.cs" />
+    <Compile Include="Assets\Scripts\PlayerIndicator.cs" />
     <Compile Include="Assets\Scripts\PushableBlock.cs" />
     <Compile Include="Assets\Scripts\PushableTester.cs" />
     <Compile Include="Assets\Scripts\RedSwitch.cs" />

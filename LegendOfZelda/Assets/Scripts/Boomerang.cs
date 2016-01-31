@@ -25,7 +25,7 @@ public class Boomerang : MonoBehaviour {
         if(coll.gameObject.tag == "Enemy") {
             state_machine.ChangeState(new StateBoomerangReturning(PlayerControl.S, this, speed));
         }
-        if(coll.gameObject.tag == "Rupee" || coll.gameObject.tag == "Heart") {
+        if(coll.gameObject.tag == "Rupee" || coll.gameObject.tag == "Heart" || coll.gameObject.tag == "Key" || coll.gameObject.tag == "BombPickup") {
             state_machine.ChangeState(new StateBoomerangReturning(PlayerControl.S, this, speed, coll.gameObject));
         }
 

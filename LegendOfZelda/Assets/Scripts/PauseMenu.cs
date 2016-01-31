@@ -13,6 +13,13 @@ public class PauseMenu : MonoBehaviour {
     public Text healthText;
     public Text rupeeText;
     public Text keysText;
+    public Text BombCountText;
+
+    public GameObject MapImage;
+    public bool hasMap = false;
+
+    public GameObject CompassController;
+    public bool hasCompass = false;
 
     public bool hasBow;
     public bool hasBoomerang;
@@ -22,6 +29,9 @@ public class PauseMenu : MonoBehaviour {
     private int currentMenuPointer = 0;
     public int usedAWeapon = 0;
     public int usedBWeapon = -1;
+
+
+    public Text returningToLevelSelect;
 	// Use this for initialization
 	void Awake () {
         if(S != null) {
@@ -41,9 +51,18 @@ public class PauseMenu : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         rupeeText.text = "Rupees: " + PlayerControl.S.rupee_count.ToString();
-        healthText.text = "Health:  " + PlayerControl.S.health.ToString();
+        healthText.text = "Health:  " + PlayerControl.S.health.ToString() + "/" + PlayerControl.S.maxhealth.ToString();
         keysText.text = "Keys:    " + PlayerControl.S.keys.ToString();
+        BombCountText.text = "Bombs:    " + PlayerControl.S.bombs.ToString();
 
+
+        if (hasMap != MapImage.GetComponent<Image>().enabled) {
+            MapImage.GetComponent<Image>().enabled = hasMap;
+        }
+
+        if(hasCompass != CompassController.activeSelf) {
+            CompassController.SetActive(hasCompass);
+        }
 
         if (Input.GetKeyDown(KeyCode.Return)) {
             if (!isPaused) {

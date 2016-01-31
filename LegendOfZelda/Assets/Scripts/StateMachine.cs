@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // State Machines are responsible for processing states, notifying them when they're about to begin or conclude, etc.
 public class StateMachine
@@ -515,6 +516,38 @@ public class StateLinkStunned : State {
         pc.current_state = EntityState.NORMAL;
     }
 
+}
+
+public class StateLinkVictory : State {
+    float duration;
+
+    public StateLinkVictory(float _duration) {
+        duration = _duration;
+    }
+
+    public override void OnUpdate(float time_delta_fraction) {
+        duration -= Time.deltaTime;
+        PauseMenu.S.returningToLevelSelect.text = "You Won! Returning to Level Select";
+
+        if (duration <= 0)
+            SceneManager.LoadScene("LevelSelector");
+    }
+}
+
+public class StateLinkDead : State {
+    float duration;
+
+    public StateLinkDead(float _duration) {
+        duration = _duration;
+    }
+
+    public override void OnUpdate(float time_delta_fraction) {
+        duration -= Time.deltaTime;
+        PauseMenu.S.returningToLevelSelect.text = "You died! Returning to Level Select";
+
+        if (duration <= 0)
+            SceneManager.LoadScene("LevelSelector");
+    }
 }
 
 // Additional recommended states:

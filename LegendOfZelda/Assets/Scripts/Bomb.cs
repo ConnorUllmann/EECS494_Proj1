@@ -26,7 +26,7 @@ public class Bomb : MonoBehaviour {
     void Explode() {
         Collider[] hitEnemies = Physics.OverlapSphere(transform.position, bombRadius);
         foreach(Collider c in hitEnemies) {
-            if (c.gameObject.tag == "Enemy" && c.GetComponent<Enemy>() != null)
+            if ((c.gameObject.tag == "Enemy" && c.GetComponent<Enemy>() != null) || (c.gameObject.tag == "Wallmaster" && c.GetComponent<Enemy>() != null) )
                 c.GetComponent<Enemy>().health -= bombDamage;
         }
 
