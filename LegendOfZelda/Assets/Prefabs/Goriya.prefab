@@ -69,11 +69,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c4c6e98c77ee0a408c8c46f539f8e40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  possibleItemDrops:
+  - {fileID: 157346, guid: a91ffba5c9abe9d41a3a48bd7ff8d7ca, type: 2}
+  - {fileID: 120244, guid: a2bc2ea4aa4c8e544a1a1ec0037fdfba, type: 2}
+  - {fileID: 146502, guid: 23d00624372031f41b836d4ed215c949, type: 2}
+  dropChance: 0.5
   current_direction: 2
   current_state: 0
   speed_max: 0.5
   health: 1
   damagedByBoomerang: 0
+  IsWallmaster: 0
   goriyaBoomerangPrefab: {fileID: 120104, guid: 2b0e90a5ca1fbcf4fa7aebb61b53273a,
     type: 2}
   boomerangReturned: 0
@@ -129,9 +135,25 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 0}
+      propertyPath: possibleItemDrops.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: goriyaBoomerang
       value: 
       objectReference: {fileID: 120104, guid: 2b0e90a5ca1fbcf4fa7aebb61b53273a, type: 2}
+    - target: {fileID: 0}
+      propertyPath: possibleItemDrops.Array.data[0]
+      value: 
+      objectReference: {fileID: 157346, guid: a91ffba5c9abe9d41a3a48bd7ff8d7ca, type: 2}
+    - target: {fileID: 0}
+      propertyPath: possibleItemDrops.Array.data[1]
+      value: 
+      objectReference: {fileID: 120244, guid: a2bc2ea4aa4c8e544a1a1ec0037fdfba, type: 2}
+    - target: {fileID: 0}
+      propertyPath: possibleItemDrops.Array.data[2]
+      value: 
+      objectReference: {fileID: 146502, guid: 23d00624372031f41b836d4ed215c949, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 146952}

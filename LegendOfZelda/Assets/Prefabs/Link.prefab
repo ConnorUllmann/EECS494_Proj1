@@ -43,7 +43,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 116762}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 39.5, y: 46.7, z: 0}
+  m_LocalPosition: {x: 39.7335, y: 5.2995014, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 428354}
@@ -126,18 +126,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cf51346a69d445409772c61ff54931e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OffscreenStopNames:
-  - Aquamentus
-  - AquamentusShot
-  - Arrow
-  - Bladetrap
-  - Boomerang
-  - Gel
-  - Goriya
-  - GoriyaBoomerang
-  - Keese
-  - Stalfos
-  - Sword
   twoDmovement: 0
   walking_velocity: 4
   rupee_count: 0
@@ -189,12 +177,25 @@ MonoBehaviour:
   current_direction: 2
   selected_weapon_prefab_A_button: {fileID: 198378, guid: 5086923027139b04d9b760050b38ee67,
     type: 2}
-  selected_weapon_prefab_B_button: {fileID: 155152, guid: 2bc7c6b015b6d3246b0a0fdcad96673a,
-    type: 2}
+  selected_weapon_prefab_B_button: {fileID: 0}
   canBoomerang: 1
   hasBow: 1
   canUseDoor: 1
+  canLaserSword: 1
   start_point: {x: 0, y: 0, z: 0}
+  OffscreenStopNames:
+  - Aquamentus
+  - AquamentusShot
+  - Arrow
+  - Bladetrap
+  - Boomerang
+  - Gel
+  - Goriya
+  - GoriyaBoomerang
+  - Keese
+  - Stalfos
+  - Sword
+  - RoomClearController
 --- !u!212 &21217734
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -233,6 +234,10 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 0}
+      propertyPath: OffscreenStopNames.Array.size
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: m_Size.x
       value: 0.9
       objectReference: {fileID: 0}
@@ -252,6 +257,10 @@ Prefab:
       propertyPath: selected_weapon_prefab_B_button
       value: 
       objectReference: {fileID: 155152, guid: 2bc7c6b015b6d3246b0a0fdcad96673a, type: 2}
+    - target: {fileID: 0}
+      propertyPath: OffscreenStopNames.Array.data[11]
+      value: RoomClearController
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 116762}

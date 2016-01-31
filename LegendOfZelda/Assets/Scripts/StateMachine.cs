@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // State Machines are responsible for processing states, notifying them when they're about to begin or conclude, etc.
 public class StateMachine
@@ -344,6 +345,10 @@ public class StateLinkNormalMovement : State
             pos.y += (Mathf.Round(pos.y * 2) / 2 - pos.y) / 2;
         }
 
+        if(PlayerControl.S.twoDmovement == true) {
+            v_input = 0.0f;
+        }
+
         p.GetComponent<Rigidbody>().velocity = new Vector3(h_input, v_input, 0) * p.walking_velocity;
 
         if (h_input > 0.0f)
@@ -375,6 +380,12 @@ public class StateLinkNormalMovement : State
                 if (p.rupee_count > 0)
                 {
                     p.rupee_count--;
+                    state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_B_button, weapon_cooldown));
+                }
+            }
+            else if (p.selected_weapon_prefab_B_button.GetComponent<Bomb>() != null) {
+                if(p.bombs > 0) {
+                    --p.bombs;
                     state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_B_button, weapon_cooldown));
                 }
             }
@@ -505,6 +516,38 @@ public class StateLinkStunned : State {
         pc.current_state = EntityState.NORMAL;
     }
 
+}
+
+public class StateLinkVictory : State {
+    float duration;
+
+    public StateLinkVictory(float _duration) {
+        duration = _duration;
+    }
+
+    public override void OnUpdate(float time_delta_fraction) {
+        duration -= Time.deltaTime;
+        PauseMenu.S.returningToLevelSelect.text = "You Won! Returning to Level Select";
+
+        if (duration <= 0)
+            SceneManager.LoadScene("LevelSelector");
+    }
+}
+
+public class StateLinkDead : State {
+    float duration;
+
+    public StateLinkDead(float _duration) {
+        duration = _duration;
+    }
+
+    public override void OnUpdate(float time_delta_fraction) {
+        duration -= Time.deltaTime;
+        PauseMenu.S.returningToLevelSelect.text = "You died! Returning to Level Select";
+
+        if (duration <= 0)
+            SceneManager.LoadScene("LevelSelector");
+    }
 }
 
 // Additional recommended states:

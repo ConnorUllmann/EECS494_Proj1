@@ -60,32 +60,46 @@
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Common">
+      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Aquamentus.cs" />
     <Compile Include="Assets\Scripts\AquamentusShot.cs" />
     <Compile Include="Assets\Scripts\Arrow.cs" />
     <Compile Include="Assets\Scripts\Bladetrap.cs" />
+    <Compile Include="Assets\Scripts\Bomb.cs" />
     <Compile Include="Assets\Scripts\Boomerang.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\CameraPoints.cs" />
     <Compile Include="Assets\Scripts\CreateCameraPoints.cs" />
     <Compile Include="Assets\Scripts\DisappearOnStart.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
+    <Compile Include="Assets\Scripts\ExplosionParts.cs" />
     <Compile Include="Assets\Scripts\Fire.cs" />
     <Compile Include="Assets\Scripts\FollowCameraPoints.cs" />
     <Compile Include="Assets\Scripts\Gel.cs" />
     <Compile Include="Assets\Scripts\Goriya.cs" />
     <Compile Include="Assets\Scripts\GoriyaBoomerang.cs" />
+    <Compile Include="Assets\Scripts\GreenSwitch.cs" />
     <Compile Include="Assets\Scripts\HUD.cs" />
     <Compile Include="Assets\Scripts\Keese.cs" />
+    <Compile Include="Assets\Scripts\MainMenu.cs" />
     <Compile Include="Assets\Scripts\OldMan.cs" />
     <Compile Include="Assets\Scripts\ParseEntities.cs" />
     <Compile Include="Assets\Scripts\ParseZeldaMap.cs" />
+    <Compile Include="Assets\Scripts\ParticleEffect.cs" />
     <Compile Include="Assets\Scripts\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\PlayerControl.cs" />
+    <Compile Include="Assets\Scripts\PlayerIndicator.cs" />
     <Compile Include="Assets\Scripts\PushableBlock.cs" />
     <Compile Include="Assets\Scripts\PushableTester.cs" />
+    <Compile Include="Assets\Scripts\RedSwitch.cs" />
+    <Compile Include="Assets\Scripts\RoomClearController.cs" />
     <Compile Include="Assets\Scripts\ShowMap.cs" />
     <Compile Include="Assets\Scripts\ShowMapOnCamera.cs" />
     <Compile Include="Assets\Scripts\Stalfos.cs" />
@@ -104,6 +118,7 @@
     <None Include="Assets\Resources\Parser\map_sprites_data.txt" />
     <None Include="Assets\Resources\map_sprites_data-old.txt" />
     <None Include="Assets\Resources\map_sprites_data.txt" />
+    <None Include="Assets\Resources\map_sprites_data_dungeon_remake.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

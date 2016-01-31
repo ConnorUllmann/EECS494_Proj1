@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -15,6 +16,7 @@ public class PlayerControl : MonoBehaviour {
     public float walking_velocity = 1.0f;
     public int rupee_count = 0;
     public int keys = 0; //Number of keys the player has.
+    public int bombs = 0;
     public float maxhealth = 3.0f;
     public float health;
     public bool bInvincible = false;
@@ -56,10 +58,11 @@ public class PlayerControl : MonoBehaviour {
     public bool canUseDoor = true;
     private bool lookBehind = false;
     public bool canLaserSword = true;
+    private bool permanentInvincibility = false;
 
     public Vector3 start_point;
     // Use this for initialization
-    void Start() {
+    void Awake() {
         if (S != null)
             Debug.LogError("Multiple players!");
         S = this;
@@ -78,9 +81,20 @@ public class PlayerControl : MonoBehaviour {
 
     Vector3 roomPos;
 
+    private bool alreadyDying = false;
     // Update is called once per frame
     void Update()
     {
+
+        if(health <= 0 && !alreadyDying) {
+            alreadyDying = true;
+            control_state_machine.ChangeState(new StateLinkDead(2.0f));
+        }
+
+        if(Input.GetKeyDown(KeyCode.I)) {
+            permanentInvincibility = (permanentInvincibility ? false : true);
+        }
+
         var roomPosNew = new Vector3(Utils.GetRoomI(transform.position.x), Utils.GetRoomJ(transform.position.y));
         if (roomPos != roomPosNew)
         {
@@ -222,6 +236,21 @@ public class PlayerControl : MonoBehaviour {
                 Destroy(coll.gameObject);
                 ++keys;
                 break;
+            case "BombPickup":
+                Destroy(coll.gameObject);
+                ++bombs;
+                break;
+            case "Triforce":
+                Destroy(coll.gameObject);
+                health = maxhealth;
+
+                control_state_machine.ChangeState(new StateLinkVictory(3.0f));
+
+                break;
+            case "HeartPiece":
+                Destroy(coll.gameObject);
+                ++maxhealth;
+                break;
 
             case "BowPickup":
                 Destroy(coll.gameObject);
@@ -231,10 +260,19 @@ public class PlayerControl : MonoBehaviour {
                 Destroy(coll.gameObject);
                 PauseMenu.S.hasBoomerang = true;
                 break;
+            case "MapPickup":
+                Destroy(coll.gameObject);
+                PauseMenu.S.hasMap = true;
+                break;
+            case "CompassPickup":
+                Destroy(coll.gameObject);
+                PauseMenu.S.hasCompass = true;
+                break;
+
 
             case "Enemy":
             case "EnemyProjectile":
-                if (!bInvincible)
+                if (!bInvincible && !permanentInvincibility)
                 {
                     --health;
                     bInvincible = true;
@@ -277,6 +315,18 @@ public class PlayerControl : MonoBehaviour {
                 control_state_machine.ChangeState(new StateLinkStunned(this, 1.0f));
                 transform.position = coll.GetComponent<TeleportToBowRoom>().target.transform.position;
                 break;
+        }
+    }
+
+    void OnCollisionEnter(Collision coll) {
+        if(coll.gameObject.tag == "Door") {
+            if (!coll.collider.GetComponent<Tile>().open &&
+                !Tile.redDoors.Contains(coll.collider.GetComponent<Tile>()) &&
+                !Tile.greenDoors.Contains(coll.collider.GetComponent<Tile>()) &&
+                keys > 0) {
+                --keys;
+                coll.collider.GetComponent<Tile>().Open();
+            }
         }
     }
 
@@ -330,7 +380,7 @@ public class PlayerControl : MonoBehaviour {
         }
 
         GetComponent<BoxCollider>().enabled = false;
-        GetComponent<Rigidbody>().velocity = door_direction;
+        GetComponent<Rigidbody>().velocity = door_direction * 1.1f;
 
         /*Collider[] hitColliders = Physics.OverlapSphere(transform.position, 6.0f);
         GameObject nextDoor = null;

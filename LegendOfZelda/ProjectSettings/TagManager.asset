@@ -21,6 +21,11 @@ TagManager:
   - 2D
   - BowRoomEntrance
   - SwordExplosive
+  - BombPickup
+  - MapPickup
+  - CompassPickup
+  - Triforce
+  - HeartPiece
   layers:
   - Default
   - TransparentFX
