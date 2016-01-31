@@ -68,6 +68,10 @@ public class Tile : MonoBehaviour {
                 tileNum = 48;
             else if (tileNum == 106)
                 tileNum = 51;
+            else if (tileNum == 100)
+            {
+                tileNum = Utils.CollidingWithLeftWall(transform.position) ? 51 : 48;
+            }
             sprend.sprite = spriteArray[tileNum];
             if(!opened.Contains(gameObject.name))
                 opened.Add(gameObject.name);
@@ -170,6 +174,12 @@ public class Tile : MonoBehaviour {
                 bc.center = Vector3.zero;
                 bc.size = new Vector3(.25f, .25f, .25f);
                 bc.isTrigger = true;
+                break;
+            case 'C': //Closed door
+                gameObject.tag = "Untagged";
+                bc.center = Vector3.zero;
+                bc.size = Vector3.one;
+                open = false;
                 break;
             case 'L': //Locked Door
                 gameObject.tag = "Door";
