@@ -297,7 +297,8 @@ public class PlayerControl : MonoBehaviour {
                     if (coll.gameObject.GetComponent<Tile>().open)
                     {
                         canUseDoor = false;
-                        MoveToNextRoom(coll);
+                        if (!MoveToNextRoom(coll))
+                            canUseDoor = true;
                     }
                 }
                 break;
@@ -343,7 +344,7 @@ public class PlayerControl : MonoBehaviour {
 
 
 
-    void MoveToNextRoom(Collider thisDoor) {
+    bool MoveToNextRoom(Collider thisDoor) {
         //Check if there is another door to go to
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, 6.0f);
         GameObject nextDoor = null;
@@ -357,7 +358,7 @@ public class PlayerControl : MonoBehaviour {
 
         if (nextDoor == null) {
             Debug.Log("No door to go to");
-            return;
+            return false;
         }
 
 
@@ -380,6 +381,7 @@ public class PlayerControl : MonoBehaviour {
 
         GetComponent<BoxCollider>().enabled = false;
         GetComponent<Rigidbody>().velocity = door_direction * 1.1f;
+        return true;
 
         /*Collider[] hitColliders = Physics.OverlapSphere(transform.position, 6.0f);
         GameObject nextDoor = null;

@@ -68,6 +68,8 @@ public class StateGelNormal : State
         {
             speed = Utils.RandomDirection4();
             tile = Tile.GetTile(pos + speed);
+            if (tile == null)
+                return;
             collider = tile.gameObject.GetComponent<BoxCollider>();
         }
         while (Utils.CollidingWithAnyEdge(pos + speed) || (tile != null && collider != null && collider.enabled));
