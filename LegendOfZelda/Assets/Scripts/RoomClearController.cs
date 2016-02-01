@@ -44,9 +44,9 @@ public class RoomClearController : MonoBehaviour {
         }
 	}
 
-    void UnsealDoor() {
+    public static void UnsealDoor() {
         foreach(Tile t in Tile.sealedDoors) {
-            if(Utils.AreInSameRoom(t.gameObject, gameObject)) {
+            if(Utils.AreInSameRoom(t.gameObject, PlayerControl.S.gameObject)) {
                 t.Open();
             }
         }

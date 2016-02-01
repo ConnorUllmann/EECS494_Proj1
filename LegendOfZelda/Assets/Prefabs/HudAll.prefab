@@ -888,6 +888,7 @@ MonoBehaviour:
   hasBoomerang: 0
   usedAWeapon: 0
   usedBWeapon: -1
+  selectPausedText: {fileID: 0}
   returningToLevelSelect: {fileID: 11405042}
 --- !u!114 &11464350
 MonoBehaviour:

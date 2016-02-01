@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class PauseMenu : MonoBehaviour {
@@ -30,6 +31,7 @@ public class PauseMenu : MonoBehaviour {
     public int usedAWeapon = 0;
     public int usedBWeapon = -1;
 
+    private bool selectPaused;
 
     public Text returningToLevelSelect;
 	// Use this for initialization
@@ -64,7 +66,7 @@ public class PauseMenu : MonoBehaviour {
             CompassController.SetActive(hasCompass);
         }
 
-        if (Input.GetKeyDown(KeyCode.Return)) {
+        if (Input.GetKeyDown(KeyCode.Return) && PlayerControl.S.GetComponent<BoxCollider>().enabled && !selectPaused) {
             if (!isPaused) {
                 isPaused = true;
                 rt.localPosition = Vector3.zero;
@@ -75,6 +77,29 @@ public class PauseMenu : MonoBehaviour {
                 PlayerControl.S.pauseCurrentRoom(0.1f);
             }
         }
+
+        if(!isPaused && Input.GetKeyDown(KeyCode.RightShift) && PlayerControl.S.GetComponent<BoxCollider>().enabled) {
+
+            if (!selectPaused) {
+                selectPaused = true;
+                returningToLevelSelect.text = "PAUSED";
+            }
+            else {
+                selectPaused = false;
+                returningToLevelSelect.text = " ";
+            }
+        }
+
+        if (selectPaused)
+            PlayerControl.S.pauseCurrentRoom(.5f);
+
+
+        if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1))
+            SceneManager.LoadScene("Dungeon");
+
+        if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2))
+            SceneManager.LoadScene("CustomLevel");
+
 
         if(isPaused) {
             PlayerControl.S.pauseCurrentRoom(1.0f);
