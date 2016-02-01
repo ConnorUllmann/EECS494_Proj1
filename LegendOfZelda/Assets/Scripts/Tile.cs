@@ -73,6 +73,10 @@ public class Tile : MonoBehaviour {
                 tileNum = 48;
             else if (tileNum == 106 || tileNum == 115 || tileNum == 99)
                 tileNum = 51;
+            else if (tileNum == 160)
+                tileNum = 26;
+            else if (tileNum == 161)
+                tileNum = 27;
             else if (tileNum == 100)
             {
                 tileNum = Utils.CollidingWithLeftWall(transform.position) ? 51 : 48;

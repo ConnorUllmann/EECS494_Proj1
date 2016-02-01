@@ -16,11 +16,14 @@ public class AquamentusShot : MonoBehaviour {
     void Update()
     {
         GetComponent<SpriteRenderer>().color = (Time.time * 40) % 4 <= 2 ? Color.white : Color.green;
-
-        if(transform.position.x < 66 ||
+        if(Utils.GetTileInRoomI(transform.position.x) < 2 ||
+           Utils.GetTileInRoomI(transform.position.x) >= 13 ||
+           Utils.GetTileInRoomJ(transform.position.y) < 2 || 
+           Utils.GetTileInRoomJ(transform.position.y) >= 9)
+        /*if(transform.position.x < 66 ||
            transform.position.x >= 77 ||
            transform.position.y < 46 ||
-           transform.position.y >= 52)
+           transform.position.y >= 52)*/
         {
             Destroy(this.gameObject);
         }
