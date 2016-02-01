@@ -85,7 +85,6 @@ public class PlayerControl : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-
         if(health <= 0 && !alreadyDying) {
             alreadyDying = true;
             control_state_machine.ChangeState(new StateLinkDead(2.0f));

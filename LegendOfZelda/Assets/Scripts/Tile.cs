@@ -232,12 +232,6 @@ public class Tile : MonoBehaviour {
                 bc.size = new Vector3(.25f, .25f, .25f);
                 bc.isTrigger = true;
                 break;
-            case 'C': //Closed door
-                gameObject.tag = "Untagged";
-                bc.center = Vector3.zero;
-                bc.size = Vector3.one;
-                open = false;
-                break;
             case 'L': //Locked Door
                 gameObject.tag = "Door";
                 open = false;

@@ -50,7 +50,7 @@ public class ShowMapOnCamera : MonoBehaviour {
         collisionS = RemoveLineEndings( collisionData.text );
         destructibleS = RemoveLineEndings( destructibleData.text );
 
-		// Read in the map data
+        // Read in the map data
 		string[] lines = mapData.text.Split('\n');
 		h = lines.Length;
 		string[] tileNums = lines[0].Split(' ');

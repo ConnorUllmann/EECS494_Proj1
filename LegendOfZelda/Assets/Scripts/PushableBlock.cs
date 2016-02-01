@@ -46,6 +46,11 @@ public class PushableBlock : MonoBehaviour {
                 var p1 = transform.position;
                 var p2 = NextPos;
                 PlayerControl.S.transform.position += p2 - p1;
+
+                if(t >= 1)
+                {
+                    
+                }
             }
         }
         else if (dTimer > 0)
