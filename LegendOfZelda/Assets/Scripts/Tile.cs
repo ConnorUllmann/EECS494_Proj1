@@ -223,6 +223,7 @@ public class Tile : MonoBehaviour {
         switch (c) {
             case 'S': // Solid
                 gameObject.tag = "Untagged";
+                bc.isTrigger = false;
                 bc.center = Vector3.zero;
                 bc.size = Vector3.one;
                 break;

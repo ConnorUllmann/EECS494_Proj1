@@ -11,7 +11,7 @@ public class RoomClearController : MonoBehaviour {
     void Awake() {
         GameObject[] allGameObject = FindObjectsOfType<GameObject>();
         foreach(GameObject go in allGameObject) {
-            if ((go.tag == "Enemy" && !go.name.Contains("Blade")) && Utils.AreInSameRoom(gameObject, go))
+            if (((go.tag == "Enemy" || go.tag == "Wallmaster") && !go.name.Contains("Blade")) && Utils.AreInSameRoom(gameObject, go))
                 enemiesInRoom.Add(go);
         }
     }

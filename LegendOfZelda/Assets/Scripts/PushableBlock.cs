@@ -49,7 +49,7 @@ public class PushableBlock : MonoBehaviour {
 
                 if(t >= 1)
                 {
-                    
+                    RoomClearController.UnsealDoor();
                 }
             }
         }

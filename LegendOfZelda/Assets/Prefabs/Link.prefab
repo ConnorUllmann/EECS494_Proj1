@@ -130,6 +130,7 @@ MonoBehaviour:
   walking_velocity: 4
   rupee_count: 0
   keys: 0
+  bombs: 0
   maxhealth: 3
   health: 3
   bInvincible: 0
@@ -196,6 +197,7 @@ MonoBehaviour:
   - Stalfos
   - Sword
   - RoomClearController
+  - Pushable
 --- !u!212 &21217734
 SpriteRenderer:
   m_ObjectHideFlags: 1
