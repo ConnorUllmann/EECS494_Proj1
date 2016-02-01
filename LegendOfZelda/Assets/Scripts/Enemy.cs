@@ -35,7 +35,7 @@ public class Enemy : MonoBehaviour
         if (health <=0) {
             Destroy(this.gameObject);
 
-            if(Random.value < dropChance) {
+            if(Random.value < dropChance && possibleItemDrops.Length > 0) {
                 GameObject temp = Instantiate(possibleItemDrops[(Mathf.FloorToInt((Random.value - .001f) * possibleItemDrops.Length))],
                                                 transform.position, new Quaternion()) as GameObject;
             }
