@@ -138,6 +138,10 @@ public class PlayerControl : MonoBehaviour {
         }
 
         if(!GetComponent<BoxCollider>().enabled) {
+
+            if (GetComponent<Rigidbody>().velocity != DontGetStuckInDoors)
+                GetComponent<Rigidbody>().velocity = DontGetStuckInDoors;
+
             Vector3 nextCell = new Vector3((int)transform.position.x + (GetComponent<Rigidbody>().velocity.x), (int)transform.position.y + (GetComponent<Rigidbody>().velocity.y), 0);
             if(!Tile.Unwalkable(nextCell)) {
                 lookBehind = true;
@@ -343,7 +347,7 @@ public class PlayerControl : MonoBehaviour {
     }
 
 
-
+    private Vector3 DontGetStuckInDoors;
     bool MoveToNextRoom(Collider thisDoor) {
         //Check if there is another door to go to
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, 6.0f);
@@ -381,6 +385,7 @@ public class PlayerControl : MonoBehaviour {
 
         GetComponent<BoxCollider>().enabled = false;
         GetComponent<Rigidbody>().velocity = door_direction * 1.1f;
+        DontGetStuckInDoors = GetComponent<Rigidbody>().velocity;
         return true;
 
         /*Collider[] hitColliders = Physics.OverlapSphere(transform.position, 6.0f);
