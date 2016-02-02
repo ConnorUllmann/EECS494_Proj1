@@ -431,6 +431,10 @@ public class StateLinkAttack : State
                 return;
         }
 
+
+        p.GetComponent<AudioSource>().Play();
+
+
         p.current_state = EntityState.ATTACKING;
 
         p.GetComponent<Rigidbody>().velocity = Vector3.zero;

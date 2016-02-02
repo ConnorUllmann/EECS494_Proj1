@@ -86,6 +86,7 @@ public class PlayerControl : MonoBehaviour {
 
     public float timeToSpawnEnemyInRoom = 2.0f;
     private float enemySpawnTimer;
+    private bool changingRoom = false;
     // Update is called once per frame
     void Update()
     {
@@ -93,8 +94,9 @@ public class PlayerControl : MonoBehaviour {
 
         if (enemySpawnTimer > 0)
             enemySpawnTimer -= Time.deltaTime;
-        if(enemySpawnTimer <= 0) {
+        if(changingRoom && enemySpawnTimer <= 0) {
             ActivateObjectsInRoom();
+            changingRoom = false;
         }
         
 
@@ -175,7 +177,8 @@ public class PlayerControl : MonoBehaviour {
             GetComponent<BoxCollider>().enabled = true;
             GetComponent<Rigidbody>().velocity = Vector3.zero;
             lookBehind = false;
-            enemySpawnTimer = 2.5f;
+            enemySpawnTimer = timeToSpawnEnemyInRoom;
+            changingRoom = true;
 
             /*
             if (!Tile.Unwalkable(transform.position)) {
