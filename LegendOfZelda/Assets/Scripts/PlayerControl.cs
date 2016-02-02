@@ -77,7 +77,9 @@ public class PlayerControl : MonoBehaviour {
         control_state_machine.ChangeState(new StateLinkNormalMovement(this));
 
         roomPos = new Vector3(-1000000, -1000000);
+        enemySpawnTimer = .5f;
     }
+
 
 
     Vector3 roomPos;
@@ -123,7 +125,8 @@ public class PlayerControl : MonoBehaviour {
         var roomPosNew = new Vector3(Utils.GetRoomI(transform.position.x), Utils.GetRoomJ(transform.position.y));
         if (roomPos != roomPosNew)
         {
-            //ActivateObjectsInRoom();
+            //enemySpawnTimer = 1.0f;
+            //changingRoom = true;
             roomPos = roomPosNew;
         }
 
@@ -409,6 +412,12 @@ public class PlayerControl : MonoBehaviour {
 
         if (coll.gameObject.tag == "Door")
             canUseDoor = true;
+    }
+
+    void OnTriggerStay(Collider coll) {
+        if (coll.gameObject.tag == "2D") {
+            twoDmovement = true;
+        }
     }
 
 

@@ -16,6 +16,8 @@ public class Enemy : MonoBehaviour
     public bool damagedByBoomerang = false;
     public bool IsWallmaster = false;
 
+    public bool paused = false;
+
     // Use this for initialization
     void Start()
     {
@@ -32,6 +34,10 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     public virtual void Update()
     {
+        if (paused)
+            return;
+
+
         if (health <=0) {
             Destroy(this.gameObject);
 
