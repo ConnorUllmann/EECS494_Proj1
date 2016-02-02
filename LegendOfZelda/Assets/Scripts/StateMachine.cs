@@ -377,9 +377,9 @@ public class StateLinkNormalMovement : State
         {
             if (p.selected_weapon_prefab_B_button.GetComponent<Arrow>() != null)
             {
-                if (p.rupee_count > 0)
+                if (p.rupee_count > 0 || p.isCustomlevel)
                 {
-                    p.rupee_count--;
+                    p.rupee_count -= (p.isCustomlevel ? 0 : 1);
                     state_machine.ChangeState(new StateLinkAttack(p, p.selected_weapon_prefab_B_button, weapon_cooldown));
                 }
             }

@@ -26,7 +26,7 @@ public class CameraPoints : MonoBehaviour {
         foreach(GameObject cpoint in cameraPoints) {
             if (cpoint != null) {
 
-                float distance = Vector3.Distance(cpoint.transform.position, PlayerControl.S.transform.position);
+                float distance = Vector3.Distance(cpoint.transform.position, PlayerControl.S.transform.position + new Vector3(0,.5f,0));
                 if (distance < minDistance) {
                     closestCameraPoint = cpoint;
                     minDistance = distance;

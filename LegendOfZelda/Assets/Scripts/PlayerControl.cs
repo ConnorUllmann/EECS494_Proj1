@@ -10,6 +10,7 @@ public class PlayerControl : MonoBehaviour {
 
     public static PlayerControl S;
 
+    public bool isCustomlevel = false;
 
     public bool twoDmovement = false;
 
@@ -82,9 +83,32 @@ public class PlayerControl : MonoBehaviour {
     Vector3 roomPos;
 
     private bool alreadyDying = false;
+
+    public float timeToSpawnEnemyInRoom = 2.0f;
+    private float enemySpawnTimer;
     // Update is called once per frame
     void Update()
     {
+
+
+        if (enemySpawnTimer > 0)
+            enemySpawnTimer -= Time.deltaTime;
+        if(enemySpawnTimer <= 0) {
+            ActivateObjectsInRoom();
+        }
+        
+
+
+
+        if(GetComponent<Rigidbody>().rotation.x != 0 ||
+            GetComponent<Rigidbody>().rotation.y != 0 ||
+            GetComponent<Rigidbody>().rotation.z != 0) {
+
+            Quaternion rot = new Quaternion();
+            rot.eulerAngles = new Vector3(0, 0, 0);
+            GetComponent<Rigidbody>().rotation = rot;
+        }
+
         if(health <= 0 && !alreadyDying) {
             alreadyDying = true;
             control_state_machine.ChangeState(new StateLinkDead(2.0f));
@@ -97,7 +121,7 @@ public class PlayerControl : MonoBehaviour {
         var roomPosNew = new Vector3(Utils.GetRoomI(transform.position.x), Utils.GetRoomJ(transform.position.y));
         if (roomPos != roomPosNew)
         {
-            ActivateObjectsInRoom();
+            //ActivateObjectsInRoom();
             roomPos = roomPosNew;
         }
 
@@ -139,23 +163,44 @@ public class PlayerControl : MonoBehaviour {
 
         if(!GetComponent<BoxCollider>().enabled) {
 
-            if (GetComponent<Rigidbody>().velocity != DontGetStuckInDoors)
-                GetComponent<Rigidbody>().velocity = DontGetStuckInDoors;
+           // if (GetComponent<Rigidbody>().velocity != DontGetStuckInDoors)
+             //   GetComponent<Rigidbody>().velocity = DontGetStuckInDoors;
 
-            Vector3 nextCell = new Vector3((int)transform.position.x + (GetComponent<Rigidbody>().velocity.x), (int)transform.position.y + (GetComponent<Rigidbody>().velocity.y), 0);
+            Vector3 nextCell = new Vector3((int)transform.position.x + (GetComponent<Rigidbody>().velocity.normalized.x), (int)transform.position.y + (GetComponent<Rigidbody>().velocity.normalized.y), 0);
             if(!Tile.Unwalkable(nextCell)) {
                 lookBehind = true;
             } 
         }
-        if(lookBehind) {
-            Vector3 prevCell = new Vector3((int)transform.position.x - (GetComponent<Rigidbody>().velocity.x), (int)transform.position.y - (GetComponent<Rigidbody>().velocity.y), 0);
+        if(lookBehind && Tile.GetTile(transform.position).gameObject.tag == "Door") {
+            GetComponent<BoxCollider>().enabled = true;
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+            lookBehind = false;
+            enemySpawnTimer = 2.5f;
+
+            /*
+            if (!Tile.Unwalkable(transform.position)) {
+                GetComponent<BoxCollider>().enabled = true;
+                GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+                canUseDoor = Tile.GetTile(transform.position).gameObject.tag != "Door";
+
+                lookBehind = false;
+                //canUseDoor = true;
+                ActivateObjectsInRoom();
+                return;
+            }
+
+        */
+            /*
+            Vector3 prevCell = new Vector3((int)transform.position.x - (GetComponent<Rigidbody>().velocity.normalized.x), (int)transform.position.y - (GetComponent<Rigidbody>().velocity.normalized.y), 0);
             if(!Tile.Unwalkable(prevCell)) {
                 GetComponent<BoxCollider>().enabled = true;
                 GetComponent<Rigidbody>().velocity = Vector3.zero;
                 lookBehind = false;
-                canUseDoor = true;
+                //canUseDoor = true;
                 ActivateObjectsInRoom();
             }
+            */
         }
 
     }
@@ -258,10 +303,24 @@ public class PlayerControl : MonoBehaviour {
             case "BowPickup":
                 Destroy(coll.gameObject);
                 PauseMenu.S.hasBow = true;
+
+                if(isCustomlevel && PauseMenu.S.hasBoomerang) {
+                    PauseMenu.S.hasBoomerang = false;
+                    selected_weapon_prefab_B_button = null;
+                    PauseMenu.S.usedBWeapon = -1;
+                }
+
                 break;
             case "BoomerangPickup":
                 Destroy(coll.gameObject);
                 PauseMenu.S.hasBoomerang = true;
+
+                if (isCustomlevel && PauseMenu.S.hasBow) {
+                    PauseMenu.S.hasBow = false;
+                    selected_weapon_prefab_B_button = null;
+                    PauseMenu.S.usedBWeapon = -1;
+                }
+
                 break;
             case "MapPickup":
                 Destroy(coll.gameObject);
@@ -344,6 +403,9 @@ public class PlayerControl : MonoBehaviour {
         if(coll.gameObject.tag == "2D") {
             twoDmovement = false;
         }
+
+        if (coll.gameObject.tag == "Door")
+            canUseDoor = true;
     }
 
 
@@ -366,25 +428,27 @@ public class PlayerControl : MonoBehaviour {
         }
 
 
-        pauseCurrentRoom(4.0f);
+        control_state_machine.ChangeState(new StateLinkStunned(this, 1.5f));
+        //pauseCurrentRoom(4.0f);
 
-        Vector3 door_direction = new Vector3();
+        Vector3 door_direction = Vector3.zero;
 
-        if (Utils.CollidingWithTopWall(transform.position)) {
+        if (Utils.CollidingWithTopWall(transform.position) || Utils.CollidingWithTopWall(transform.position + new Vector3(0, .5f, 0))) {
             door_direction = new Vector3(0, 1, 0);
-        }
-        else if (Utils.CollidingWithBottomWall(transform.position)) {
+        } else if (Utils.CollidingWithBottomWall(transform.position) || Utils.CollidingWithBottomWall(transform.position + new Vector3(0, -.5f, 0))) {
             door_direction = new Vector3(0, -1, 0);
-        }
-        else if (Utils.CollidingWithRightWall(transform.position)) {
+        } else if (Utils.CollidingWithRightWall(transform.position) || Utils.CollidingWithRightWall(transform.position + new Vector3(.5f, 0, 0))) {
             door_direction = new Vector3(1, 0, 0);
-        } 
-        else if (Utils.CollidingWithLeftWall(transform.position)) {
+        } else if (Utils.CollidingWithLeftWall(transform.position) || Utils.CollidingWithLeftWall(transform.position + new Vector3(-.5f, 0, 0))) {
             door_direction = new Vector3(-1, 0, 0);
         }
 
+        if(door_direction == Vector3.zero) {
+            return false;
+        }
+
         GetComponent<BoxCollider>().enabled = false;
-        GetComponent<Rigidbody>().velocity = door_direction * 1.1f;
+        GetComponent<Rigidbody>().velocity = door_direction * walking_velocity;
         DontGetStuckInDoors = GetComponent<Rigidbody>().velocity;
         return true;
 

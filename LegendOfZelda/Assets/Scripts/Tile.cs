@@ -150,8 +150,8 @@ public class Tile : MonoBehaviour {
     //Returns the tile at the given position.
     public static Tile GetTile(Vector3 pos)
     {
-        int x_ = (int)pos.x;
-        int y_ = (int)pos.y;
+        int x_ = Mathf.RoundToInt(pos.x);
+        int y_ = Mathf.RoundToInt(pos.y);
         //Debug.Log("(" + x_ + ", " + y_ + ") " + tiles.Count + ", " + (tiles[x_] == null ? "null" : tiles[x_].Count.ToString()));
         if (x_ < 0 || x_ >= tiles.Count || y_ < 0 || y_ >= tiles[x_].Count)
             return null;
